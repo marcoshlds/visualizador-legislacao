@@ -62,11 +62,10 @@
     transition: background 0.3s, color 0.3s;
   }
 
-  /* Header */
   .header {
     background: var(--header-bg);
     color: var(--header-text);
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -79,7 +78,7 @@
   }
 
   .header h1 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 400;
     display: flex;
     align-items: center;
@@ -88,20 +87,20 @@
 
   .header-controls {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.4rem;
     align-items: center;
     flex-wrap: wrap;
   }
 
   .header-controls button {
-    padding: 0.4rem 0.8rem;
+    padding: 0.35rem 0.7rem;
     border: 1px solid rgba(255,255,255,0.2);
     background: rgba(255,255,255,0.1);
     color: var(--header-text);
     border-radius: 6px;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     transition: all 0.15s;
   }
 
@@ -109,7 +108,6 @@
     background: rgba(255,255,255,0.2);
   }
 
-  /* Drop Zone */
   .drop-zone-container {
     padding: 2rem;
     text-align: center;
@@ -152,7 +150,6 @@
     font-size: 0.9rem;
   }
 
-  /* TOC Sidebar */
   .layout {
     display: flex;
     max-width: 1400px;
@@ -160,20 +157,21 @@
   }
 
   .toc-sidebar {
-    width: 300px;
-    min-width: 300px;
+    width: 320px;
+    min-width: 320px;
     background: var(--toc-bg);
     border-right: 1px solid var(--border);
-    max-height: calc(100vh - 70px);
+    max-height: calc(100vh - 60px);
     overflow-y: auto;
     position: sticky;
-    top: 70px;
+    top: 60px;
     padding: 1rem 0;
+    font-size: 0.85rem;
   }
 
   .toc-sidebar h3 {
     padding: 0 1rem 0.5rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-secondary);
@@ -182,14 +180,14 @@
   }
 
   .toc-item {
-    padding: 0.35rem 1rem;
+    padding: 0.3rem 1rem;
     cursor: pointer;
-    font-size: 0.85rem;
     border-left: 3px solid transparent;
     transition: all 0.15s;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.4;
   }
 
   .toc-item:hover {
@@ -197,13 +195,13 @@
     border-left-color: var(--accent);
   }
 
-  .toc-item.titulo { font-weight: 700; color: var(--title-color); padding-left: 1rem; }
-  .toc-item.capitulo { font-weight: 600; color: var(--chapter-color); padding-left: 1.5rem; }
-  .toc-item.secao { font-weight: 500; color: var(--section-color); padding-left: 2rem; font-size: 0.8rem; }
-  .toc-item.subsecao { padding-left: 2.5rem; font-size: 0.78rem; }
-  .toc-item.artigo { padding-left: 2.5rem; font-size: 0.78rem; color: var(--text-secondary); }
+  .toc-item.titulo { font-weight: 700; color: var(--title-color); padding-left: 0.8rem; }
+  .toc-item.capitulo { font-weight: 600; color: var(--chapter-color); padding-left: 1.2rem; font-size: 0.82rem; }
+  .toc-item.secao { font-weight: 500; color: var(--section-color); padding-left: 1.6rem; font-size: 0.8rem; }
+  .toc-item.subsecao { padding-left: 2rem; font-size: 0.78rem; }
+  .toc-item.artigo { padding-left: 2rem; font-size: 0.78rem; color: var(--text-secondary); }
+  .toc-item.anexo { padding-left: 1.2rem; font-size: 0.82rem; font-weight: 600; color: var(--accent); }
 
-  /* Document */
   .document-container {
     flex: 1;
     padding: 2rem;
@@ -226,13 +224,13 @@
 
   @media (max-width: 640px) {
     .paper { padding: 1rem; }
-    .header { padding: 1rem; }
-    .header h1 { font-size: 1rem; }
+    .header { padding: 0.8rem; }
+    .header h1 { font-size: 0.95rem; }
+    .header-controls button { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
   }
 
-  /* Legislative Elements */
   .leg-titulo {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--title-color);
     text-align: center;
@@ -243,7 +241,7 @@
   }
 
   .leg-capitulo {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--chapter-color);
     text-align: center;
@@ -252,7 +250,7 @@
   }
 
   .leg-secao {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--section-color);
     text-align: center;
@@ -283,6 +281,7 @@
     font-weight: 700;
     color: var(--accent);
     margin-bottom: 0.3rem;
+    font-size: 1.05rem;
   }
 
   .leg-paragrafo {
@@ -308,7 +307,6 @@
   .leg-inciso-header {
     font-weight: 600;
     color: var(--text);
-    display: inline;
   }
 
   .leg-alinea {
@@ -321,7 +319,6 @@
   .leg-alinea-header {
     font-weight: 500;
     color: var(--text-secondary);
-    display: inline;
   }
 
   .leg-subalinea {
@@ -380,7 +377,6 @@
     font-weight: 600;
   }
 
-  /* Empty state */
   .empty-state {
     text-align: center;
     color: var(--text-secondary);
@@ -392,68 +388,35 @@
     margin-bottom: 1rem;
   }
 
-  /* Print */
   @media print {
     .header, .toc-sidebar, .drop-zone-container { display: none !important; }
     .paper { box-shadow: none; padding: 0; background: white; }
     body { background: white; }
-    .leg-artigo, .leg-paragrafo, .leg-inciso, .leg-alinea { 
-      background: transparent !important; 
+    .leg-artigo, .leg-paragrafo, .leg-inciso, .leg-alinea {
+      background: transparent !important;
       border-left: 1px solid #ccc !important;
     }
   }
 
-  /* Search highlight */
-  .highlight {
-    background: #ffeb3b;
-    color: #000;
-    padding: 0 2px;
-    border-radius: 2px;
-  }
-
-  [data-theme="dark"] .highlight {
-    background: #b8860b;
-    color: #fff;
-  }
-
-  /* Font size classes */
   .fs-small { font-size: 0.9rem; }
   .fs-medium { font-size: 1.05rem; }
   .fs-large { font-size: 1.2rem; }
 
-  /* Smooth scroll */
   html { scroll-behavior: smooth; }
-
-  /* Loading */
-  .loading {
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-secondary);
-  }
-  .loading::after {
-    content: "⏳";
-    display: block;
-    font-size: 2rem;
-    margin-top: 0.5rem;
-    animation: pulse 1s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
 </style>
+<base target="_blank">
 </head>
 <body>
 
 <div class="header">
   <h1>📜 Conversor de Legislação Municipal</h1>
   <div class="header-controls">
-    <button onclick="setFontSize('small')" title="Fonte pequena">🔤 A-</button>
-    <button onclick="setFontSize('medium')" title="Fonte média" id="btnMedium">🔤 A</button>
-    <button onclick="setFontSize('large')" title="Fonte grande">🔤 A+</button>
-    <button onclick="toggleTheme()" title="Alternar tema" id="themeBtn">🌙 Escuro</button>
-    <button onclick="window.print()" title="Imprimir">🖨️ Imprimir</button>
-    <button onclick="document.getElementById('fileInput').click()" title="Carregar arquivo">📁 Abrir</button>
+    <button id="btnSmall" title="Fonte pequena">🔤 A-</button>
+    <button id="btnMedium" title="Fonte média">🔤 A</button>
+    <button id="btnLarge" title="Fonte grande">🔤 A+</button>
+    <button id="themeBtn" title="Alternar tema">🌙 Escuro</button>
+    <button id="btnPrint" title="Imprimir">🖨️ Imprimir</button>
+    <button id="btnOpen" title="Carregar arquivo">📁 Abrir</button>
   </div>
 </div>
 
@@ -474,9 +437,9 @@
     <h3>📑 Índice</h3>
     <div id="tocContent"></div>
   </nav>
-  
+
   <div class="document-container">
-    <div class="paper" id="paper">
+    <div class="paper fs-medium" id="paper">
       <div class="empty-state" id="emptyState">
         <div class="icon">📄</div>
         <p><strong>Nenhum documento carregado.</strong><br>
@@ -488,6 +451,7 @@
 </div>
 
 <script>
+
 // ===== PARSER ENGINE =====
 
 class LegislationParser {
@@ -499,28 +463,21 @@ class LegislationParser {
   parse(rawText) {
     this.elements = [];
     this.toc = [];
-    
-    // Step 1: Detect and handle HTML
+
     let text = this.preprocess(rawText);
-    
-    // Step 2: Split into logical lines
-    let lines = this.splitLines(text);
-    
-    // Step 3: Parse structure
+    let lines = this.splitAndMergeLines(text);
     this.parseStructure(lines);
-    
+
     return { elements: this.elements, toc: this.toc };
   }
 
   preprocess(rawText) {
-    // Detect if HTML
     const isHTML = /<(html|body|table|font|p|div|br)[\s>]/i.test(rawText);
-    
+
     if (isHTML) {
       return this.extractTextFromHTML(rawText);
     }
-    
-    // Plain text: decode HTML entities
+
     const textarea = document.createElement('textarea');
     textarea.innerHTML = rawText;
     return textarea.value;
@@ -529,98 +486,100 @@ class LegislationParser {
   extractTextFromHTML(html) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-    
-    // Remove scripts and styles
     doc.querySelectorAll('script, style').forEach(el => el.remove());
-    
-    // Get text content
     let text = doc.body.innerText || doc.body.textContent || '';
-    
-    // Decode HTML entities
     const textarea = document.createElement('textarea');
     textarea.innerHTML = text;
     return textarea.value;
   }
 
-  splitLines(text) {
-    // Normalize line endings
-    text = text.replace(/\\r\\n/g, '\\n').replace(/\\r/g, '\\n');
-    
-    // Split and clean
-    let lines = text.split('\\n').map(l => l.trim()).filter(l => l.length > 0);
-    
-    // Merge broken lines (e.g., "CAPÍTULO\\nI\\nDos Princípios")
+  splitAndMergeLines(text) {
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    let lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
     let merged = [];
     let i = 0;
     while (i < lines.length) {
       let line = lines[i];
-      
-      // Check if next lines should be merged
+
       if (i + 1 < lines.length) {
         const next = lines[i + 1];
         const next2 = lines[i + 2] || '';
-        
-        // CAPÍTULO + Roman numeral + Title
-        if (/^CAP[ÍI]TULO$/i.test(line) && /^[IVX]+$/i.test(next)) {
-          line = line + ' ' + next + ' ' + next2;
-          i += 3;
-          merged.push(line);
-          continue;
-        }
-        
-        // SEÇÃO + Roman numeral + Title
-        if (/^SE[ÇC][ÃA]O$/i.test(line) && /^[IVX]+$/i.test(next)) {
-          line = line + ' ' + next + ' ' + next2;
-          i += 3;
-          merged.push(line);
-          continue;
-        }
-        
-        // SUBSEÇÃO + Roman numeral + Title
-        if (/^SUBSE[ÇC][ÃA]O$/i.test(line) && /^[IVX]+$/i.test(next)) {
-          line = line + ' ' + next + ' ' + next2;
-          i += 3;
-          merged.push(line);
-          continue;
-        }
-        
-        // TÍTULO + Roman numeral (title might be on same line or next)
-        if (/^T[ÍI]TULO$/i.test(line) && /^[IVX]+/i.test(next)) {
-          if (/^[IVX]+$/i.test(next)) {
-            line = line + ' ' + next;
-            i += 2;
-            // Check if title follows
-            if (i < lines.length && !/^T[ÍI]TULO$/i.test(lines[i]) && !/^CAP[ÍI]TULO$/i.test(lines[i]) && !/^Art\\./i.test(lines[i])) {
-              line += ' ' + lines[i];
-              i++;
-            }
-            merged.push(line);
-            continue;
+
+        // CAPITULO + Roman + Title
+        if (/^CAP[\u00cdI]TULO$/i.test(line) && /^[IVX]+$/i.test(next)) {
+          line = line + ' ' + next;
+          i += 2;
+          if (i < lines.length && !this.isStructural(lines[i])) {
+            line += ' ' + lines[i];
+            i++;
           }
+          merged.push(line);
+          continue;
         }
-        
-        // Art. Nº might be split
-        if (/^Art\\.$/i.test(line) && /^\\d+/i.test(next)) {
+
+        // SECAO + Roman + Title
+        if (/^SE[\u00c7C][\u00c3A]O$/i.test(line) && /^[IVX]+$/i.test(next)) {
+          line = line + ' ' + next;
+          i += 2;
+          if (i < lines.length && !this.isStructural(lines[i])) {
+            line += ' ' + lines[i];
+            i++;
+          }
+          merged.push(line);
+          continue;
+        }
+
+        // SUBSECAO + Roman + Title
+        if (/^SUBSE[\u00c7C][\u00c3A]O$/i.test(line) && /^[IVX]+$/i.test(next)) {
+          line = line + ' ' + next;
+          i += 2;
+          if (i < lines.length && !this.isStructural(lines[i])) {
+            line += ' ' + lines[i];
+            i++;
+          }
+          merged.push(line);
+          continue;
+        }
+
+        // TITULO + Roman
+        if (/^T[\u00cdI]TULO$/i.test(line) && /^[IVX]+$/i.test(next)) {
+          line = line + ' ' + next;
+          i += 2;
+          if (i < lines.length && !this.isStructural(lines[i])) {
+            line += ' ' + lines[i];
+            i++;
+          }
+          merged.push(line);
+          continue;
+        }
+
+        // Art. + number
+        if (/^Art\.$/i.test(line) && /^\d+/i.test(next)) {
           line = line + ' ' + next;
           i += 2;
           merged.push(line);
           continue;
         }
-        
-        // § Nº might be split
-        if (/^§$/i.test(line) && /^\\d+/i.test(next)) {
+
+        // section symbol + number
+        if (/^\u00a7$/i.test(line) && /^\d+/i.test(next)) {
           line = line + ' ' + next;
           i += 2;
           merged.push(line);
           continue;
         }
       }
-      
+
       merged.push(line);
       i++;
     }
-    
+
     return merged;
+  }
+
+  isStructural(line) {
+    return /^(T[\u00cdI]TULO|CAP[\u00cdI]TULO|SE[\u00c7C][\u00c3A]O|SUBSE[\u00c7C][\u00c3A]O|Art\.|ANEXO)/i.test(line);
   }
 
   parseStructure(lines) {
@@ -630,52 +589,46 @@ class LegislationParser {
     let currentSection = null;
     let currentSubsection = null;
     let currentArticle = null;
-    let currentParagraph = null;
     let currentInciso = null;
-    
-    // First pass: identify document metadata
+
+    // Extract metadata
     let title = '';
     let ementa = [];
     let preambulo = [];
     let inEmenta = false;
-    let inPreambulo = false;
     let metadataEnd = 0;
-    
-    // Find title
+
     for (let j = 0; j < Math.min(20, lines.length); j++) {
-      if (/^LEI\\s+N[º°]\\s*\\d+/i.test(lines[j])) {
+      if (/^LEI\s+N[\u00ba\u00b0]\s*\d+/i.test(lines[j])) {
         title = lines[j];
         metadataEnd = j + 1;
         break;
       }
     }
-    
-    // Find ementa (quoted text near beginning)
+
     for (let j = metadataEnd; j < Math.min(30, lines.length); j++) {
-      if (lines[j].startsWith('"') || lines[j].startsWith('\\u201C') || lines[j].startsWith('\\u2018')) {
+      if (lines[j].startsWith('\u201c') || lines[j].startsWith('\u2018') || lines[j].startsWith('"')) {
         inEmenta = true;
       }
       if (inEmenta) {
         ementa.push(lines[j]);
-        if (lines[j].endsWith('"') || lines[j].endsWith('\\u201D') || lines[j].endsWith('\\u2019')) {
+        if (lines[j].endsWith('\u201d') || lines[j].endsWith('\u2019') || lines[j].endsWith('"')) {
           inEmenta = false;
           metadataEnd = j + 1;
           break;
         }
       }
     }
-    
-    // Find preâmbulo (text before first TÍTULO or Art.)
+
     for (let j = metadataEnd; j < lines.length; j++) {
-      if (/^T[ÍI]TULO\\s+[IVX]/i.test(lines[j]) || /^Art\\.\\s*\\d+/i.test(lines[j])) {
+      if (/^T[\u00cdI]TULO\s+[IVX]/i.test(lines[j]) || /^Art\.\s*\d+/i.test(lines[j])) {
         break;
       }
-      if (lines[j].length > 20 && !/^CAP[ÍI]TULO/i.test(lines[j])) {
+      if (lines[j].length > 20 && !this.isStructural(lines[j])) {
         preambulo.push(lines[j]);
       }
     }
-    
-    // Add metadata
+
     if (title) {
       this.addElement('titulo-documento', title, { level: 0 });
     }
@@ -685,75 +638,74 @@ class LegislationParser {
     if (preambulo.length > 0) {
       this.addElement('preambulo', preambulo.join(' '));
     }
-    
-    // Second pass: parse legislative structure
+
+    // Parse legislative structure
     for (i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       if (!line) continue;
-      
-      // Skip already processed metadata
+
       if (i < metadataEnd && (line === title || ementa.some(e => line.includes(e)))) continue;
-      
-      // TÍTULO
-      const tituloMatch = line.match(/^T[ÍI]TULO\\s+([IVX\\d]+)\\s*(.*)/i);
+
+      // TITULO
+      const tituloMatch = line.match(/^T[\u00cdI]TULO\s+([IVX\d]+)\s*(.*)/i);
       if (tituloMatch) {
         currentTitle = tituloMatch[1];
         const tituloText = tituloMatch[2] ? tituloMatch[2].trim() : '';
         this.addElement('titulo', line, { 
           numero: currentTitle, 
           texto: tituloText,
-          id: `titulo-${currentTitle}`
+          id: 'titulo-' + currentTitle
         });
         currentChapter = null;
         currentSection = null;
         currentSubsection = null;
         continue;
       }
-      
-      // CAPÍTULO
-      const capMatch = line.match(/^CAP[ÍI]TULO\\s+([IVX\\d]+)\\s*(.*)/i);
+
+      // CAPITULO
+      const capMatch = line.match(/^CAP[\u00cdI]TULO\s+([IVX\d]+)\s*(.*)/i);
       if (capMatch) {
         currentChapter = capMatch[1];
         const capText = capMatch[2] ? capMatch[2].trim() : '';
         this.addElement('capitulo', line, { 
           numero: currentChapter, 
           texto: capText,
-          id: `cap-${currentTitle || '0'}-${currentChapter}`
+          id: 'cap-' + (currentTitle || '0') + '-' + currentChapter
         });
         currentSection = null;
         currentSubsection = null;
         continue;
       }
-      
-      // SEÇÃO
-      const secMatch = line.match(/^SE[ÇC][ÃA]O\\s+([IVX\\d]+)\\s*(.*)/i);
+
+      // SECAO
+      const secMatch = line.match(/^SE[\u00c7C][\u00c3A]O\s+([IVX\d]+)\s*(.*)/i);
       if (secMatch) {
         currentSection = secMatch[1];
         const secText = secMatch[2] ? secMatch[2].trim() : '';
         this.addElement('secao', line, { 
           numero: currentSection, 
           texto: secText,
-          id: `sec-${currentTitle || '0'}-${currentChapter || '0'}-${currentSection}`
+          id: 'sec-' + (currentTitle || '0') + '-' + (currentChapter || '0') + '-' + currentSection
         });
         currentSubsection = null;
         continue;
       }
-      
-      // SUBSEÇÃO
-      const subsecMatch = line.match(/^SUBSE[ÇC][ÃA]O\\s+([IVX\\d]+)\\s*(.*)/i);
+
+      // SUBSECAO
+      const subsecMatch = line.match(/^SUBSE[\u00c7C][\u00c3A]O\s+([IVX\d]+)\s*(.*)/i);
       if (subsecMatch) {
         currentSubsection = subsecMatch[1];
         const subsecText = subsecMatch[2] ? subsecMatch[2].trim() : '';
         this.addElement('subsecao', line, { 
           numero: currentSubsection, 
           texto: subsecText,
-          id: `subsec-${currentTitle || '0'}-${currentChapter || '0'}-${currentSection || '0'}-${currentSubsection}`
+          id: 'subsec-' + (currentTitle || '0') + '-' + (currentChapter || '0') + '-' + (currentSection || '0') + '-' + currentSubsection
         });
         continue;
       }
-      
+
       // ARTIGO
-      const artMatch = line.match(/^Art\\.\\s*(\\d+[º°]?)\\s*(.*)/i);
+      const artMatch = line.match(/^Art\.\s*(\d+[\u00ba\u00b0]?)\s*(.*)/i);
       if (artMatch) {
         const artNum = artMatch[1];
         const artText = artMatch[2] ? artMatch[2].trim() : '';
@@ -761,29 +713,29 @@ class LegislationParser {
         this.addElement('artigo', line, { 
           numero: artNum, 
           texto: artText,
-          id: `art-${artNum.replace(/[º°]/g, '')}`
+          id: 'art-' + artNum.replace(/[\u00ba\u00b0]/g, '')
         });
         currentParagraph = null;
         currentInciso = null;
         continue;
       }
-      
-      // PARÁGRAFO ÚNICO
-      const paragUnicoMatch = line.match(/^(Parágrafo\\s+único)\\.\\s*(.*)/i);
+
+      // PARAGRAFO UNICO
+      const paragUnicoMatch = line.match(/^(Par[\u00e1a]grafo\s+[\u00fanu]nico)\.?\s*(.*)/i);
       if (paragUnicoMatch) {
         const paragText = paragUnicoMatch[2] ? paragUnicoMatch[2].trim() : '';
         currentParagraph = 'unico';
         this.addElement('paragrafo', line, { 
-          numero: 'único', 
+          numero: '\u00fanico', 
           texto: paragText,
-          id: `parag-${currentArticle || '0'}-unico`
+          id: 'parag-' + (currentArticle || '0') + '-unico'
         });
         currentInciso = null;
         continue;
       }
-      
-      // PARÁGRAFO (§)
-      const paragMatch = line.match(/^§\\s*(\\d+[º°]?)\\s*(.*)/);
+
+      // PARAGRAFO (section symbol)
+      const paragMatch = line.match(/^\u00a7\s*(\d+[\u00ba\u00b0]?)\s*(.*)/);
       if (paragMatch) {
         const paragNum = paragMatch[1];
         const paragText = paragMatch[2] ? paragMatch[2].trim() : '';
@@ -791,41 +743,41 @@ class LegislationParser {
         this.addElement('paragrafo', line, { 
           numero: paragNum, 
           texto: paragText,
-          id: `parag-${currentArticle || '0'}-${paragNum.replace(/[º°]/g, '')}`
+          id: 'parag-' + (currentArticle || '0') + '-' + paragNum.replace(/[\u00ba\u00b0]/g, '')
         });
         currentInciso = null;
         continue;
       }
-      
+
       // INCISO (Roman numerals with dash)
-      const incisoMatch = line.match(/^([IVX]+)\\s*[-–—]\\s*(.*)/);
-      if (incisoMatch && incisoMatch[2].length > 5) {
+      const incisoMatch = line.match(/^([IVX]+)\s*[-\u2013\u2014]\s*(.*)/);
+      if (incisoMatch && incisoMatch[2].length > 3) {
         const incisoNum = incisoMatch[1];
         const incisoText = incisoMatch[2].trim();
         currentInciso = incisoNum;
         this.addElement('inciso', line, { 
           numero: incisoNum, 
           texto: incisoText,
-          id: `inciso-${currentArticle || '0'}-${incisoNum}`
+          id: 'inciso-' + (currentArticle || '0') + '-' + incisoNum
         });
         continue;
       }
-      
-      // ALÍNEA (lowercase letter with parenthesis)
-      const alineaMatch = line.match(/^([a-z])\\)\\s*(.*)/);
+
+      // ALINEA (lowercase letter with parenthesis)
+      const alineaMatch = line.match(/^([a-z])\)\s*(.*)/);
       if (alineaMatch && alineaMatch[2].length > 3) {
         const alineaNum = alineaMatch[1];
         const alineaText = alineaMatch[2].trim();
         this.addElement('alinea', line, { 
           numero: alineaNum, 
           texto: alineaText,
-          id: `alinea-${currentArticle || '0'}-${currentInciso || '0'}-${alineaNum}`
+          id: 'alinea-' + (currentArticle || '0') + '-' + (currentInciso || '0') + '-' + alineaNum
         });
         continue;
       }
-      
-      // SUBALÍNEA (lowercase letters with parenthesis, 2+ chars - but this is rare in Brazilian law)
-      const subalineaMatch = line.match(/^([a-z]{2,})\\)\\s*(.*)/);
+
+      // SUBALINEA
+      const subalineaMatch = line.match(/^([a-z]{2,})\)\s*(.*)/);
       if (subalineaMatch && subalineaMatch[2].length > 3) {
         const subalineaNum = subalineaMatch[1];
         const subalineaText = subalineaMatch[2].trim();
@@ -835,29 +787,27 @@ class LegislationParser {
         });
         continue;
       }
-      
+
       // ANEXO
-      const anexoMatch = line.match(/^(ANEXO\\s+[IVX\\d-]+[AB]?)\\s*(.*)/i);
+      const anexoMatch = line.match(/^(ANEXO\s+[IVX\d-]+[AB]?)\s*(.*)/i);
       if (anexoMatch) {
         const anexoNum = anexoMatch[1];
         const anexoText = anexoMatch[2] ? anexoMatch[2].trim() : '';
         this.addElement('anexo', line, { 
           numero: anexoNum, 
           texto: anexoText,
-          id: `anexo-${anexoNum.replace(/\\s+/g, '-').toLowerCase()}`
+          id: 'anexo-' + anexoNum.replace(/\s+/g, '-').toLowerCase()
         });
         continue;
       }
-      
-      // ASSINATURA / DATA
-      if (/^(Prefeitura|Publicado|Ref\\.)/i.test(line) || /^[A-Z][a-z]+\\s+[A-Z][a-z]+$/i.test(line) && line.length < 40) {
-        if (i > lines.length - 20) {
-          this.addElement('assinatura', line);
-          continue;
-        }
+
+      // ASSINATURA / DATA (near end)
+      if (i > lines.length - 20 && (/^(Prefeitura|Publicado|Ref\.)/i.test(line) || /^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(line) && line.length < 40)) {
+        this.addElement('assinatura', line);
+        continue;
       }
-      
-      // Regular text (continuation of previous element)
+
+      // Regular text
       if (this.elements.length > 0) {
         const last = this.elements[this.elements.length - 1];
         if (last.type === 'texto') {
@@ -871,14 +821,14 @@ class LegislationParser {
     }
   }
 
-  addElement(type, content, meta = {}) {
-    const el = { type, content, ...meta };
+  addElement(type, content, meta) {
+    meta = meta || {};
+    const el = Object.assign({ type: type, content: content }, meta);
     this.elements.push(el);
-    
-    // Add to TOC for major elements
+
     if (['titulo', 'capitulo', 'secao', 'subsecao', 'artigo', 'anexo'].includes(type)) {
       this.toc.push({
-        type,
+        type: type,
         label: this.getTOCLabel(el),
         id: meta.id || '',
         level: this.getTOCLevel(type)
@@ -888,12 +838,12 @@ class LegislationParser {
 
   getTOCLabel(el) {
     switch(el.type) {
-      case 'titulo': return `📖 ${el.content}`;
-      case 'capitulo': return `📂 ${el.content}`;
-      case 'secao': return `📁 ${el.content}`;
-      case 'subsecao': return `📄 ${el.content}`;
-      case 'artigo': return `§ Art. ${el.numero}`;
-      case 'anexo': return `📎 ${el.content}`;
+      case 'titulo': return '\ud83d\udcd6 ' + el.content;
+      case 'capitulo': return '\ud83d\udcc2 ' + el.content;
+      case 'secao': return '\ud83d\udcc1 ' + el.content;
+      case 'subsecao': return '\ud83d\udcc4 ' + el.content;
+      case 'artigo': return '\u00a7 Art. ' + el.numero;
+      case 'anexo': return '\ud83d\udcce ' + el.content;
       default: return el.content;
     }
   }
@@ -907,89 +857,87 @@ class LegislationParser {
 // ===== RENDERER =====
 
 function renderDocument(data) {
-  const content = document.getElementById('content');
+  const contentEl = document.getElementById('content');
   const tocContent = document.getElementById('tocContent');
   const tocSidebar = document.getElementById('tocSidebar');
-  
+
   let html = '';
   let tocHtml = '';
-  
-  data.elements.forEach(el => {
+
+  data.elements.forEach(function(el) {
     switch(el.type) {
       case 'titulo-documento':
-        html += `<h1 class="leg-titulo" style="margin-top:0;">${escapeHtml(el.content)}</h1>`;
+        html += '<h1 class="leg-titulo" style="margin-top:0;">' + escapeHtml(el.content) + '</h1>';
         break;
       case 'titulo':
-        html += `<h2 class="leg-titulo" id="${el.id}">${escapeHtml(el.content)}</h2>`;
+        html += '<h2 class="leg-titulo" id="' + el.id + '">' + escapeHtml(el.content) + '</h2>';
         break;
       case 'capitulo':
-        html += `<h3 class="leg-capitulo" id="${el.id}">${escapeHtml(el.content)}</h3>`;
+        html += '<h3 class="leg-capitulo" id="' + el.id + '">' + escapeHtml(el.content) + '</h3>';
         break;
       case 'secao':
-        html += `<h4 class="leg-secao" id="${el.id}">${escapeHtml(el.content)}</h4>`;
+        html += '<h4 class="leg-secao" id="' + el.id + '">' + escapeHtml(el.content) + '</h4>';
         break;
       case 'subsecao':
-        html += `<h5 class="leg-subsecao" id="${el.id}">${escapeHtml(el.content)}</h5>`;
+        html += '<h5 class="leg-subsecao" id="' + el.id + '">' + escapeHtml(el.content) + '</h5>';
         break;
       case 'ementa':
-        html += `<div class="leg-ementa">${escapeHtml(el.content)}</div>`;
+        html += '<div class="leg-ementa">' + escapeHtml(el.content) + '</div>';
         break;
       case 'preambulo':
-        html += `<div class="leg-preambulo">${escapeHtml(el.content)}</div>`;
+        html += '<div class="leg-preambulo">' + escapeHtml(el.content) + '</div>';
         break;
       case 'artigo':
-        html += `<div class="leg-artigo" id="${el.id}">
-          <div class="leg-artigo-header">Art. ${escapeHtml(el.numero)}</div>
-          <div class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^Art\.\\s*\\d+[º°]?\\s*/, ''))}</div>
-        </div>`;
+        html += '<div class="leg-artigo" id="' + el.id + '">' +
+          '<div class="leg-artigo-header">Art. ' + escapeHtml(el.numero) + '</div>' +
+          '<div class="leg-texto">' + escapeHtml(el.texto || el.content.replace(/^Art\.\s*\d+[\u00ba\u00b0]?\s*/, '')) + '</div>' +
+          '</div>';
         break;
       case 'paragrafo':
-        html += `<div class="leg-paragrafo" id="${el.id}">
-          <span class="leg-paragrafo-header">§ ${escapeHtml(el.numero)}</span>
-          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^§\\s*\\d+[º°]?\\s*/, '').replace(/^Parágrafo\\s+único\\.\\s*/, ''))}</span>
-        </div>`;
+        html += '<div class="leg-paragrafo" id="' + el.id + '">' +
+          '<span class="leg-paragrafo-header">\u00a7 ' + escapeHtml(el.numero) + '</span> ' +
+          '<span class="leg-texto">' + escapeHtml(el.texto || el.content.replace(/^\u00a7\s*\d+[\u00ba\u00b0]?\s*/, '').replace(/^Par[\u00e1a]grafo\s+[\u00fanu]nico\.?\s*/, '')) + '</span>' +
+          '</div>';
         break;
       case 'inciso':
-        html += `<div class="leg-inciso" id="${el.id}">
-          <span class="leg-inciso-header">${escapeHtml(el.numero)} –</span>
-          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^[IVX]+\\s*[-–—]\\s*/, ''))}</span>
-        </div>`;
+        html += '<div class="leg-inciso" id="' + el.id + '">' +
+          '<span class="leg-inciso-header">' + escapeHtml(el.numero) + ' \u2013</span> ' +
+          '<span class="leg-texto">' + escapeHtml(el.texto || el.content.replace(/^[IVX]+\s*[-\u2013\u2014]\s*/, '')) + '</span>' +
+          '</div>';
         break;
       case 'alinea':
-        html += `<div class="leg-alinea">
-          <span class="leg-alinea-header">${escapeHtml(el.numero)})</span>
-          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^[a-z]\\)\\s*/, ''))}</span>
-        </div>`;
+        html += '<div class="leg-alinea">' +
+          '<span class="leg-alinea-header">' + escapeHtml(el.numero) + ')</span> ' +
+          '<span class="leg-texto">' + escapeHtml(el.texto || el.content.replace(/^[a-z]\)\s*/, '')) + '</span>' +
+          '</div>';
         break;
       case 'subalinea':
-        html += `<div class="leg-subalinea">
-          <span class="leg-alinea-header">${escapeHtml(el.numero)})</span>
-          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^[a-z]{2,}\\)\\s*/, ''))}</span>
-        </div>`;
+        html += '<div class="leg-subalinea">' +
+          '<span class="leg-alinea-header">' + escapeHtml(el.numero) + ')</span> ' +
+          '<span class="leg-texto">' + escapeHtml(el.texto || el.content.replace(/^[a-z]{2,}\)\s*/, '')) + '</span>' +
+          '</div>';
         break;
       case 'anexo':
-        html += `<div class="leg-anexo" id="${el.id}">
-          <div class="leg-anexo-header">${escapeHtml(el.content)}</div>
-        </div>`;
+        html += '<div class="leg-anexo" id="' + el.id + '">' +
+          '<div class="leg-anexo-header">' + escapeHtml(el.content) + '</div>' +
+          '</div>';
         break;
       case 'assinatura':
-        html += `<div class="leg-assinatura">${escapeHtml(el.content)}</div>`;
+        html += '<div class="leg-assinatura">' + escapeHtml(el.content) + '</div>';
         break;
       case 'texto':
-        html += `<p class="leg-texto">${escapeHtml(el.content)}</p>`;
+        html += '<p class="leg-texto">' + escapeHtml(el.content) + '</p>';
         break;
     }
   });
-  
-  // Build TOC
-  data.toc.forEach(item => {
-    const className = item.type;
-    tocHtml += `<div class="toc-item ${className}" onclick="scrollToElement('${item.id}')" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</div>`;
+
+  data.toc.forEach(function(item) {
+    tocHtml += '<div class="toc-item ' + item.type + '" onclick="scrollToElement(\'' + item.id + '\')" title="' + escapeHtml(item.label) + '">' + escapeHtml(item.label) + '</div>';
   });
-  
-  content.innerHTML = html;
+
+  contentEl.innerHTML = html;
   tocContent.innerHTML = tocHtml;
-  
+
   if (data.toc.length > 0) {
     tocSidebar.style.display = 'block';
   }
@@ -997,9 +945,12 @@ function renderDocument(data) {
 
 function escapeHtml(text) {
   if (!text) return '';
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function scrollToElement(id) {
@@ -1011,87 +962,110 @@ function scrollToElement(id) {
 
 // ===== UI CONTROLS =====
 
-const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('fileInput');
-const fileName = document.getElementById('fileName');
-const content = document.getElementById('content');
-const emptyState = document.getElementById('emptyState');
-const dropZoneContainer = document.getElementById('dropZoneContainer');
-
-// Drag & drop
-dropZone.addEventListener('click', () => fileInput.click());
-
-dropZone.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  dropZone.classList.add('dragover');
-});
-
-dropZone.addEventListener('dragleave', () => {
-  dropZone.classList.remove('dragover');
-});
-
-dropZone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  dropZone.classList.remove('dragover');
-  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-});
-
-fileInput.addEventListener('change', (e) => {
-  if (e.target.files.length) handleFile(e.target.files[0]);
-});
-
-function handleFile(file) {
-  fileName.textContent = '📄 ' + file.name;
-  const reader = new FileReader();
-  
-  reader.onload = (e) => {
-    try {
-      const parser = new LegislationParser();
-      const data = parser.parse(e.target.result);
-      
-      emptyState.style.display = 'none';
-      content.style.display = 'block';
-      dropZoneContainer.style.display = 'none';
-      
-      renderDocument(data);
-    } catch (err) {
-      console.error(err);
-      alert('Erro ao processar arquivo: ' + err.message);
-    }
-  };
-  
-  reader.readAsText(file);
-}
-
-// Font size
-function setFontSize(size) {
-  document.querySelectorAll('.header-controls button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  
+document.addEventListener('DOMContentLoaded', function() {
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const fileName = document.getElementById('fileName');
+  const contentEl = document.getElementById('content');
+  const emptyState = document.getElementById('emptyState');
+  const dropZoneContainer = document.getElementById('dropZoneContainer');
   const paper = document.getElementById('paper');
-  paper.classList.remove('fs-small', 'fs-medium', 'fs-large');
-  paper.classList.add('fs-' + size);
-}
 
-// Theme
-let darkMode = false;
-function toggleTheme() {
-  darkMode = !darkMode;
-  document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-  document.getElementById('themeBtn').textContent = darkMode ? '☀️ Claro' : '🌙 Escuro';
-}
+  // Drag & drop
+  dropZone.addEventListener('click', function() { fileInput.click(); });
 
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey || e.metaKey) {
-    if (e.key === 'o') {
-      e.preventDefault();
-      fileInput.click();
-    } else if (e.key === 'p') {
-      e.preventDefault();
-      window.print();
+  dropZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.classList.remove('dragover');
+  });
+
+  dropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) {
+      handleFile(e.dataTransfer.files[0]);
     }
+  });
+
+  fileInput.addEventListener('change', function(e) {
+    if (e.target.files.length) {
+      handleFile(e.target.files[0]);
+    }
+  });
+
+  function handleFile(file) {
+    fileName.textContent = '\ud83d\udcc4 ' + file.name;
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+      try {
+        const parser = new LegislationParser();
+        const data = parser.parse(e.target.result);
+
+        emptyState.style.display = 'none';
+        contentEl.style.display = 'block';
+        dropZoneContainer.style.display = 'none';
+
+        renderDocument(data);
+      } catch (err) {
+        console.error(err);
+        alert('Erro ao processar arquivo: ' + err.message);
+      }
+    };
+
+    reader.readAsText(file);
   }
+
+  // Button handlers
+  document.getElementById('btnSmall').addEventListener('click', function() {
+    paper.classList.remove('fs-small', 'fs-medium', 'fs-large');
+    paper.classList.add('fs-small');
+  });
+
+  document.getElementById('btnMedium').addEventListener('click', function() {
+    paper.classList.remove('fs-small', 'fs-medium', 'fs-large');
+    paper.classList.add('fs-medium');
+  });
+
+  document.getElementById('btnLarge').addEventListener('click', function() {
+    paper.classList.remove('fs-small', 'fs-medium', 'fs-large');
+    paper.classList.add('fs-large');
+  });
+
+  document.getElementById('themeBtn').addEventListener('click', function() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    this.textContent = isDark ? '\ud83c\udf19 Escuro' : '\u2600\ufe0f Claro';
+  });
+
+  document.getElementById('btnPrint').addEventListener('click', function() {
+    window.print();
+  });
+
+  document.getElementById('btnOpen').addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey || e.metaKey) {
+      if (e.key === 'o') {
+        e.preventDefault();
+        fileInput.click();
+      } else if (e.key === 'p') {
+        e.preventDefault();
+        window.print();
+      }
+    }
+  });
 });
 </script>
 
