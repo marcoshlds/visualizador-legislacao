@@ -304,7 +304,7 @@
         }
 
         .paragrafo-unico::before {
-            content: "Par\u00e1grafo \u00fanico. ";
+            content: "Parágrafo único. ";
             font-weight: 700;
             font-style: normal;
         }
@@ -417,18 +417,18 @@
 
     <header class="app-header">
         <div>
-            <h1>\u2696\uFE0F Visualizador de Legisla\u00e7\u00e3o</h1>
+            <h1>⚖️ Visualizador de Legislação</h1>
             <div class="subtitle">Conversor de textos legislativos (.txt / .mht)</div>
         </div>
         <div class="toolbar">
-            <label for="fileInput">\uD83D\uDCC1 Abrir arquivo</label>
+            <label for="fileInput">📁 Abrir arquivo</label>
             <input type="file" id="fileInput" accept=".txt,.text,.mht,.mhtml">
-            <button onclick="toggleSidebar()" id="btnSidebar">\uD83D\uDCD1 \u00cdndice</button>
+            <button onclick="toggleSidebar()" id="btnSidebar">📑 Índice</button>
             <button onclick="setFontSize('small')" class="font-btn">A-</button>
             <button onclick="setFontSize('medium')" class="font-btn active" id="btnMedium">A</button>
             <button onclick="setFontSize('large')" class="font-btn">A+</button>
-            <button onclick="toggleTheme()" id="btnTheme">\uD83C\uDF19</button>
-            <button onclick="window.print()">\uD83D\uDDA8\uFE0F</button>
+            <button onclick="toggleTheme()" id="btnTheme">🌙</button>
+            <button onclick="window.print()">🖨️</button>
         </div>
     </header>
 
@@ -443,14 +443,14 @@
         <main class="document-wrapper">
             <div class="paper" id="paper">
                 <div class="empty-state" id="emptyState">
-                    <div class="icon">\uD83D\uDCC4</div>
+                    <div class="icon">📄</div>
                     <h2>Nenhum documento carregado</h2>
                     <p>Arraste um arquivo .txt ou .mht aqui, ou clique em "Abrir arquivo".</p>
                     <div class="drop-hint">
                         <strong>Suporta:</strong><br>
-                        \u2022 Arquivos de texto (.txt) com estrutura de Leis Municipais<br>
-                        \u2022 Arquivos MHTML (.mht / .mhtml)<br><br>
-                        <small>Detecta automaticamente: T\u00edtulos, Cap\u00edtulos, Se\u00e7\u00f5es, Subse\u00e7\u00f5es, Artigos, Par\u00e1grafos, Incisos, Al\u00edneas e Subal\u00edneas (itens numerados).</small>
+                        • Arquivos de texto (.txt) com estrutura de Leis Municipais<br>
+                        • Arquivos MHTML (.mht / .mhtml) salvos pelo navegador<br><br>
+                        <small>Detecta automaticamente: Títulos, Capítulos, Seções, Subseções, Artigos, Parágrafos, Incisos, Alíneas e Subalíneas.</small>
                     </div>
                 </div>
                 <div id="content" style="display: none;"></div>
@@ -544,7 +544,6 @@
                 }
             }
 
-            // Look ahead for items (subalineas) belonging to an alinea
             absorbItems(startIdx) {
                 let items = [];
                 let k = startIdx;
@@ -616,7 +615,7 @@
                         this.closeOpenLists();
                         this.state.inArtigo = false;
                         const id = this.genId('titulo');
-                        const text = m[2] ? `T\u00cdTULO ${m[1]} \u2014 ${m[2]}` : `T\u00cdTULO ${m[1]}`;
+                        const text = m[2] ? `TÍTULO ${m[1]} — ${m[2]}` : `TÍTULO ${m[1]}`;
                         this.html.push(`<h2 id="${id}">${this.escapeHtml(text)}</h2>`);
                         this.toc.push({ level: 'titulo', id, text });
                         matched = true;
@@ -625,7 +624,7 @@
                         this.closeOpenLists();
                         this.state.inArtigo = false;
                         const id = this.genId('capitulo');
-                        const text = m[2] ? `CAP\u00cdTULO ${m[1]} \u2014 ${m[2]}` : `CAP\u00cdTULO ${m[1]}`;
+                        const text = m[2] ? `CAPÍTULO ${m[1]} — ${m[2]}` : `CAPÍTULO ${m[1]}`;
                         this.html.push(`<h3 id="${id}">${this.escapeHtml(text)}</h3>`);
                         this.toc.push({ level: 'capitulo', id, text });
                         matched = true;
@@ -634,7 +633,7 @@
                         this.closeOpenLists();
                         this.state.inArtigo = false;
                         const id = this.genId('secao');
-                        const text = m[2] ? `Se\u00e7\u00e3o ${m[1]} \u2014 ${m[2]}` : `Se\u00e7\u00e3o ${m[1]}`;
+                        const text = m[2] ? `Seção ${m[1]} — ${m[2]}` : `Seção ${m[1]}`;
                         this.html.push(`<h4 id="${id}">${this.escapeHtml(text)}</h4>`);
                         this.toc.push({ level: 'secao', id, text });
                         matched = true;
@@ -643,7 +642,7 @@
                         this.closeOpenLists();
                         this.state.inArtigo = false;
                         const id = this.genId('subsecao');
-                        const text = m[2] ? `Subse\u00e7\u00e3o ${m[1]} \u2014 ${m[2]}` : `Subse\u00e7\u00e3o ${m[1]}`;
+                        const text = m[2] ? `Subseção ${m[1]} — ${m[2]}` : `Subseção ${m[1]}`;
                         this.html.push(`<h5 id="${id}">${this.escapeHtml(text)}</h5>`);
                         this.toc.push({ level: 'subsecao', id, text });
                         matched = true;
@@ -667,12 +666,12 @@
                         }
 
                         this.html.push(`<section class="artigo" id="${id}">`);
-                        this.html.push(`<div class="artigo-header">Art. ${artNum}\u00ba</div>`);
+                        this.html.push(`<div class="artigo-header">Art. ${artNum}º</div>`);
                         if (artText) {
                             this.html.push(`<div class="artigo-body">${this.formatText(artText)}</div>`);
                         }
                         this.html.push('</section>');
-                        this.toc.push({ level: 'artigo', id, text: `Art. ${artNum}\u00ba` });
+                        this.toc.push({ level: 'artigo', id, text: `Art. ${artNum}º` });
                         this.state.inArtigo = true;
                         i = j - 1;
                         matched = true;
@@ -700,7 +699,7 @@
                             j++;
                         }
 
-                        this.html.push(`<p class="paragrafo"><span class="paragrafo-header">\u00a7 ${num}\u00ba</span> ${this.formatText(text)}</p>`);
+                        this.html.push(`<p class="paragrafo"><span class="paragrafo-header">§ ${num}º</span> ${this.formatText(text)}</p>`);
                         i = j - 1;
                         matched = true;
                     }
@@ -745,7 +744,7 @@
                             j++;
                         }
 
-                        this.html.push(`<li><span class="inciso-marker">${marker} \u2014</span> ${this.formatText(text)}`);
+                        this.html.push(`<li><span class="inciso-marker">${marker} —</span> ${this.formatText(text)}`);
                         if (alineas.length > 0) {
                             this.html.push('<ul class="alineas-list">');
                             alineas.forEach(a => {
@@ -858,66 +857,141 @@
             }
         }
 
-        function parseMht(mhtText) {
-            const boundaryMatch = mhtText.match(/boundary="([^"]+)"/i) ||
-                                  mhtText.match(/boundary=([^;\s]+)/i);
-            if (!boundaryMatch) {
-                const htmlMatch = mhtText.match(/<html[\s\S]*?<\/html>/i);
-                return htmlMatch ? htmlMatch[0] : '<p>N\u00e3o foi poss\u00edvel analisar o arquivo MHT.</p>';
+        // Detect if text is actually MHTML content disguised as .txt
+        function isMhtmlContent(text) {
+            const firstLines = text.slice(0, 500).toLowerCase();
+            return firstLines.includes('mime-version') &&
+                   firstLines.includes('content-type:') &&
+                   firstLines.includes('multipart/');
+        }
+
+        // Extract plain text from HTML content
+        function htmlToText(html) {
+            // Create a temporary DOM element
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+
+            // Replace <br>, <br/>, <br /> with newlines
+            html = html.replace(/<br\s*\/?>/gi, '\n');
+
+            // Replace block elements with newlines
+            html = html.replace(/<\/p>/gi, '\n\n');
+            html = html.replace(/<\/div>/gi, '\n');
+            html = html.replace(/<\/td>/gi, '\t');
+            html = html.replace(/<\/tr>/gi, '\n');
+            html = html.replace(/<\/li>/gi, '\n');
+
+            // Decode common HTML entities
+            const entities = {
+                '&nbsp;': ' ', '&amp;': '&', '&lt;': '<', '&gt;': '>',
+                '&ccedil;': 'ç', '&Ccedil;': 'Ç', '&atilde;': 'ã', '&Atilde;': 'Ã',
+                '&otilde;': 'õ', '&Otilde;': 'Õ', '&aacute;': 'á', '&Aacute;': 'Á',
+                '&eacute;': 'é', '&Eacute;': 'É', '&iacute;': 'í', '&Iacute;': 'Í',
+                '&oacute;': 'ó', '&Oacute;': 'Ó', '&uacute;': 'ú', '&Uacute;': 'Ú',
+                '&agrave;': 'à', '&Agrave;': 'À', '&egrave;': 'è', '&Egrave;': 'È',
+                '&igrave;': 'ì', '&Igrave;': 'Ì', '&ograve;': 'ò', '&Ograve;': 'Ò',
+                '&ugrave;': 'ù', '&Ugrave;': 'Ù', '&acirc;': 'â', '&Acirc;': 'Â',
+                '&ecirc;': 'ê', '&Ecirc;': 'Ê', '&icirc;': 'î', '&Icirc;': 'Î',
+                '&ocirc;': 'ô', '&Ocirc;': 'Ô', '&ucirc;': 'û', '&Ucirc;': 'Û',
+                '&auml;': 'ä', '&Auml;': 'Ä', '&euml;': 'ë', '&Euml;': 'Ë',
+                '&iuml;': 'ï', '&Iuml;': 'Ï', '&ouml;': 'ö', '&Ouml;': 'Ö',
+                '&uuml;': 'ü', '&Uuml;': 'Ü', '&aring;': 'å', '&Aring;': 'Å',
+                '&aelig;': 'æ', '&AElig;': 'Æ', '&oslash;': 'ø', '&Oslash;': 'Ø',
+                '&ntilde;': 'ñ', '&Ntilde;': 'Ñ', '&ordf;': 'ª', '&ordm;': 'º',
+                '&quot;': '"', '&apos;': "'", '&rsquo;': "'", '&lsquo;': "'",
+                '&rdquo;': '"', '&ldquo;': '"', '&ndash;': '–', '&mdash;': '—',
+                '&hellip;': '…', '&bull;': '•', '&sect;': '§', '&deg;': '°',
+                '&sup1;': '¹', '&sup2;': '²', '&sup3;': '³', '&frac14;': '¼',
+                '&frac12;': '½', '&frac34;': '¾', '&para;': '¶', '&middot;': '·',
+                '&raquo;': '»', '&laquo;': '«', '&reg;': '®', '&copy;': '©',
+                '&trade;': '™', '&euro;': '€', '&pound;': '£', '&yen;': '¥',
+                '&cent;': '¢', '&plusmn;': '±', '&times;': '×', '&divide;': '÷',
+                '&micro;': 'µ', '&macr;': '¯', '&acute;': '´', '&cedil;': '¸',
+                '&circ;': 'ˆ', '&tilde;': '˜', '&ensp;': ' ', '&emsp;': '  ',
+                '&thinsp;': ' ', '&zwnj;': '', '&zwsp;': ''
+            };
+
+            for (const [entity, char] of Object.entries(entities)) {
+                html = html.split(entity).join(char);
             }
 
-            const boundary = boundaryMatch[1].replace(/^"|"$/g, '');
+            // Decode numeric entities
+            html = html.replace(/&#(x?[0-9a-fA-F]+);/g, (match, code) => {
+                const num = code.startsWith('x') ? parseInt(code.slice(1), 16) : parseInt(code, 10);
+                return String.fromCharCode(num);
+            });
+
+            // Strip remaining HTML tags
+            html = html.replace(/<[^>]+>/g, '');
+
+            // Collapse multiple newlines
+            html = html.replace(/\n{3,}/g, '\n\n');
+
+            // Collapse multiple spaces
+            html = html.replace(/[ \t]+/g, ' ');
+
+            return html.trim();
+        }
+
+        function decodeQuotedPrintable(str) {
+            // Soft line breaks: = followed by newline
+            str = str.replace(/=(\r?\n)/g, '');
+            // Hex escapes
+            str = str.replace(/=([0-9A-Fa-f]{2})/g, (match, hex) => {
+                return String.fromCharCode(parseInt(hex, 16));
+            });
+            return str;
+        }
+
+        function parseMht(mhtText) {
+            // Try to find boundary - handle various formats
+            const boundaryMatch = mhtText.match(/boundary=["']?([^"'\s;]+)["']?/i);
+            if (!boundaryMatch) {
+                // Try to extract HTML directly
+                const htmlMatch = mhtText.match(/<html[\s\S]*?<\/html>/i);
+                if (htmlMatch) {
+                    return htmlToText(htmlMatch[0]);
+                }
+                return null;
+            }
+
+            const boundary = boundaryMatch[1].replace(/^["']|["']$/g, '');
             const parts = mhtText.split('--' + boundary);
-            const resources = {};
             let mainHtml = '';
 
-            parts.forEach(part => {
-                if (!part.trim() || part.trim() === '--') return;
-                const headerEnd = part.indexOf('\r\n\r\n');
+            for (const part of parts) {
+                if (!part.trim() || part.trim() === '--') continue;
+
+                // Find header/body separator - handle both \r\n\r\n and \n\n
+                let headerEnd = part.indexOf('\r\n\r\n');
+                if (headerEnd === -1) headerEnd = part.indexOf('\n\n');
+                if (headerEnd === -1) continue;
+
                 const headers = part.substring(0, headerEnd).toLowerCase();
-                const body = part.substring(headerEnd + 4);
+                let body = part.substring(headerEnd + (part.indexOf('\r\n\r\n') === headerEnd ? 4 : 2));
 
                 const ctMatch = headers.match(/content-type:\s*([^\s;]+)/);
-                const clMatch = headers.match(/content-location:\s*([^\r\n]+)/);
-                const cidMatch = headers.match(/content-id:\s*<([^>]+)>/);
-
                 const contentType = ctMatch ? ctMatch[1] : '';
-                const location = clMatch ? clMatch[1].trim() : '';
-                const cid = cidMatch ? cidMatch[1] : '';
                 const isBase64 = headers.includes('base64');
                 const isQP = headers.includes('quoted-printable');
 
-                let decoded = body;
-                if (isBase64) {
-                    try { decoded = atob(body.replace(/\s/g, '')); }
-                    catch(e) { decoded = body.replace(/\s/g, ''); }
-                } else if (isQP) {
-                    decoded = body.replace(/=(\r?\n)?/g, (m, nl) => nl ? '' : m)
-                                  .replace(/=([0-9A-Fa-f]{2})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-                }
-
                 if (contentType.includes('text/html')) {
-                    mainHtml = decoded;
-                } else if (contentType.startsWith('image/') || contentType.startsWith('application/')) {
-                    const b64 = isBase64 ? decoded : btoa(decoded);
-                    const dataUri = `data:${contentType};base64,${b64}`;
-                    if (location) resources[location] = dataUri;
-                    if (cid) resources['cid:' + cid] = dataUri;
+                    if (isQP) {
+                        body = decodeQuotedPrintable(body);
+                    } else if (isBase64) {
+                        try {
+                            body = atob(body.replace(/\s/g, ''));
+                        } catch(e) {
+                            body = body.replace(/\s/g, '');
+                        }
+                    }
+                    mainHtml = body;
+                    break; // We only need the first HTML part
                 }
-            });
+            }
 
-            Object.keys(resources).forEach(key => {
-                const esc = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const re = new RegExp(`(src|href)=["\']${esc}["\']`, 'gi');
-                mainHtml = mainHtml.replace(re, `$1="${resources[key]}"`);
-                const fname = key.split('/').pop();
-                if (fname) {
-                    const fre = new RegExp(`(src|href)=["\'][^"\']*${fname.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["\']`, 'gi');
-                    mainHtml = mainHtml.replace(fre, `$1="${resources[key]}"`);
-                }
-            });
-
-            return mainHtml;
+            if (!mainHtml) return null;
+            return htmlToText(mainHtml);
         }
 
         const paper = document.getElementById('paper');
@@ -941,10 +1015,28 @@
             const reader = new FileReader();
 
             reader.onload = e => {
+                const text = e.target.result;
+
+                // Check if .txt file is actually MHTML content
+                if ((ext === 'txt' || ext === 'text') && isMhtmlContent(text)) {
+                    const extractedText = parseMht(text);
+                    if (extractedText) {
+                        renderTxt(extractedText);
+                    } else {
+                        alert('Não foi possível extrair o texto do arquivo MHTML.');
+                    }
+                    return;
+                }
+
                 if (ext === 'txt' || ext === 'text') {
-                    renderTxt(e.target.result);
+                    renderTxt(text);
                 } else if (ext === 'mht' || ext === 'mhtml') {
-                    renderMht(e.target.result);
+                    const extractedText = parseMht(text);
+                    if (extractedText) {
+                        renderTxt(extractedText);
+                    } else {
+                        renderMhtRaw(text);
+                    }
                 }
             };
             reader.readAsText(file);
@@ -963,15 +1055,74 @@
             setupScrollSpy();
         }
 
-        function renderMht(mhtText) {
+        function renderMhtRaw(mhtText) {
+            // Fallback: render MHTML HTML directly without restructuring
             emptyState.style.display = 'none';
             content.style.display = 'block';
             sidebar.classList.add('hidden');
-            tocList.innerHTML = '<li><a href="#" style="font-style: italic;">MHTML \u2014 \u00edndice n\u00e3o dispon\u00edvel</a></li>';
+            tocList.innerHTML = '<li><a href="#" style="font-style: italic;">MHTML — índice não disponível</a></li>';
 
-            const html = parseMht(mhtText);
+            const boundaryMatch = mhtText.match(/boundary=["']?([^"'\s;]+)["']?/i);
+            if (!boundaryMatch) {
+                const htmlMatch = mhtText.match(/<html[\s\S]*?<\/html>/i);
+                content.innerHTML = htmlMatch ? htmlMatch[0] : '<p>Erro ao analisar MHTML.</p>';
+                return;
+            }
+
+            const boundary = boundaryMatch[1].replace(/^["']|["']$/g, '');
+            const parts = mhtText.split('--' + boundary);
+            const resources = {};
+            let mainHtml = '';
+
+            for (const part of parts) {
+                if (!part.trim() || part.trim() === '--') continue;
+
+                let headerEnd = part.indexOf('\r\n\r\n');
+                if (headerEnd === -1) headerEnd = part.indexOf('\n\n');
+                if (headerEnd === -1) continue;
+
+                const headers = part.substring(0, headerEnd).toLowerCase();
+                let body = part.substring(headerEnd + (part.indexOf('\r\n\r\n') === headerEnd ? 4 : 2));
+
+                const ctMatch = headers.match(/content-type:\s*([^\s;]+)/);
+                const clMatch = headers.match(/content-location:\s*([^\r\n]+)/);
+                const cidMatch = headers.match(/content-id:\s*<([^>]+)>/);
+
+                const contentType = ctMatch ? ctMatch[1] : '';
+                const location = clMatch ? clMatch[1].trim() : '';
+                const cid = cidMatch ? cidMatch[1] : '';
+                const isBase64 = headers.includes('base64');
+                const isQP = headers.includes('quoted-printable');
+
+                if (isQP) body = decodeQuotedPrintable(body);
+                else if (isBase64) {
+                    try { body = atob(body.replace(/\s/g, '')); }
+                    catch(e) { body = body.replace(/\s/g, ''); }
+                }
+
+                if (contentType.includes('text/html')) {
+                    mainHtml = body;
+                } else if (contentType.startsWith('image/') || contentType.startsWith('application/')) {
+                    const b64 = isBase64 ? body : btoa(body);
+                    const dataUri = `data:${contentType};base64,${b64}`;
+                    if (location) resources[location] = dataUri;
+                    if (cid) resources['cid:' + cid] = dataUri;
+                }
+            }
+
+            Object.keys(resources).forEach(key => {
+                const esc = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const re = new RegExp(`(src|href)=["\']${esc}["\']`, 'gi');
+                mainHtml = mainHtml.replace(re, `$1="${resources[key]}"`);
+                const fname = key.split('/').pop();
+                if (fname) {
+                    const fre = new RegExp(`(src|href)=["\'][^"\']*${fname.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["\']`, 'gi');
+                    mainHtml = mainHtml.replace(fre, `$1="${resources[key]}"`);
+                }
+            });
+
             const container = document.createElement('div');
-            container.innerHTML = html;
+            container.innerHTML = mainHtml || '<p>Erro ao analisar MHTML.</p>';
             container.querySelectorAll('script').forEach(el => el.remove());
             content.innerHTML = '';
             content.appendChild(container);
@@ -979,6 +1130,10 @@
 
         function buildToc(items) {
             tocList.innerHTML = '';
+            if (items.length === 0) {
+                tocList.innerHTML = '<li><a href="#" style="font-style: italic;">Nenhuma estrutura detectada</a></li>';
+                return;
+            }
             items.forEach(item => {
                 const li = document.createElement('li');
                 li.className = `toc-${item.level}`;
@@ -1030,7 +1185,7 @@
         function toggleTheme() {
             darkMode = !darkMode;
             document.body.classList.toggle('dark', darkMode);
-            document.getElementById('btnTheme').textContent = darkMode ? '\u2600\uFE0F' : '\uD83C\uDF19';
+            document.getElementById('btnTheme').textContent = darkMode ? '☀️' : '🌙';
         }
     </script>
 </body>
