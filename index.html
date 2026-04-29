@@ -1,1192 +1,1099 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizador de Legislação Municipal</title>
-    <style>
-        :root {
-            --bg: #f5f3ee;
-            --paper: #ffffff;
-            --text: #1a1a1a;
-            --text-secondary: #555;
-            --accent: #8b4513;
-            --accent-light: #a0522d;
-            --border: #d4d0c8;
-            --shadow: 0 2px 12px rgba(0,0,0,0.06);
-            --sidebar-bg: #faf9f7;
-            --hover-bg: #f0ece4;
-            --font-serif: "Georgia", "Times New Roman", serif;
-            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📜 Conversor de Legislação Municipal</title>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --paper: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #555;
+    --accent: #8B4513;
+    --accent-light: #a0522d;
+    --border: #d4cfc5;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --header-bg: #2c3e50;
+    --header-text: #ecf0f1;
+    --toc-bg: #f8f9fa;
+    --hover-bg: #e8e4dc;
+    --title-color: #6b2d0f;
+    --chapter-color: #4a3728;
+    --section-color: #5d4e37;
+    --article-bg: #faf9f7;
+    --article-border: #e0dbd0;
+    --paragraph-bg: #f5f3ee;
+    --inciso-bg: #f0ede8;
+    --alinea-bg: #ebe8e2;
+  }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+  [data-theme="dark"] {
+    --bg: #1a1a1a;
+    --paper: #242424;
+    --text: #e0e0e0;
+    --text-secondary: #999;
+    --accent: #c4956a;
+    --accent-light: #d4a574;
+    --border: #3a3a3a;
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    --header-bg: #1a1a2e;
+    --header-text: #e0e0e0;
+    --toc-bg: #2a2a2a;
+    --hover-bg: #333;
+    --title-color: #d4a574;
+    --chapter-color: #c4956a;
+    --section-color: #b8956a;
+    --article-bg: #2a2a2a;
+    --article-border: #3a3a3a;
+    --paragraph-bg: #2d2d2d;
+    --inciso-bg: #303030;
+    --alinea-bg: #333333;
+  }
 
-        body {
-            font-family: var(--font-serif);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.75;
-            font-size: 17px;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .app-header {
-            background: var(--paper);
-            border-bottom: 2px solid var(--accent);
-            padding: 1.25rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 200;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+  body {
+    font-family: 'Georgia', 'Times New Roman', 'Noto Serif', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
 
-        .app-header h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--accent);
-            letter-spacing: -0.01em;
-        }
+  /* Header */
+  .header {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 1.5rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 
-        .app-header .subtitle {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            font-family: var(--font-sans);
-        }
+  .header h1 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-        .toolbar {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+  .header-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 
-        .toolbar button, .toolbar label {
-            padding: 0.4rem 0.9rem;
-            border: 1px solid var(--border);
-            background: var(--paper);
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: 0.8rem;
-            transition: all 0.15s;
-            color: var(--text);
-        }
+  .header-controls button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: var(--header-text);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+  }
 
-        .toolbar button:hover, .toolbar label:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
+  .header-controls button:hover {
+    background: rgba(255,255,255,0.2);
+  }
 
-        .toolbar button.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
+  /* Drop Zone */
+  .drop-zone-container {
+    padding: 2rem;
+    text-align: center;
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+  }
 
-        .toolbar input[type="file"] { display: none; }
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: var(--bg);
+  }
 
-        .app-body {
-            display: flex;
-            max-width: 1400px;
-            margin: 0 auto;
-            min-height: calc(100vh - 80px);
-        }
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--accent);
+    background: var(--hover-bg);
+  }
 
-        .sidebar {
-            width: 320px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-            max-height: calc(100vh - 80px);
-            position: sticky;
-            top: 80px;
-            padding: 1.5rem 0;
-            font-family: var(--font-sans);
-            font-size: 0.85rem;
-        }
+  .drop-zone input { display: none; }
 
-        .sidebar.hidden { display: none; }
+  .drop-zone-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
 
-        .toc-title {
-            padding: 0 1.5rem 0.75rem;
-            font-weight: 600;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.75rem;
-        }
+  .drop-zone-text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
 
-        .toc-list {
-            list-style: none;
-        }
+  .file-name {
+    margin-top: 0.75rem;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
 
-        .toc-list li {
-            border-left: 3px solid transparent;
-            transition: background 0.15s;
-        }
+  /* TOC Sidebar */
+  .layout {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
 
-        .toc-list li:hover {
-            background: var(--hover-bg);
-        }
+  .toc-sidebar {
+    width: 300px;
+    min-width: 300px;
+    background: var(--toc-bg);
+    border-right: 1px solid var(--border);
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    padding: 1rem 0;
+  }
 
-        .toc-list a {
-            display: block;
-            padding: 0.35rem 1.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+  .toc-sidebar h3 {
+    padding: 0 1rem 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.5rem;
+  }
 
-        .toc-list a:hover {
-            color: var(--accent);
-        }
+  .toc-item {
+    padding: 0.35rem 1rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-        .toc-list li.active {
-            border-left-color: var(--accent);
-            background: var(--hover-bg);
-        }
+  .toc-item:hover {
+    background: var(--hover-bg);
+    border-left-color: var(--accent);
+  }
 
-        .toc-list li.active a {
-            color: var(--accent);
-            font-weight: 600;
-        }
+  .toc-item.titulo { font-weight: 700; color: var(--title-color); padding-left: 1rem; }
+  .toc-item.capitulo { font-weight: 600; color: var(--chapter-color); padding-left: 1.5rem; }
+  .toc-item.secao { font-weight: 500; color: var(--section-color); padding-left: 2rem; font-size: 0.8rem; }
+  .toc-item.subsecao { padding-left: 2.5rem; font-size: 0.78rem; }
+  .toc-item.artigo { padding-left: 2.5rem; font-size: 0.78rem; color: var(--text-secondary); }
 
-        .toc-titulo a { font-weight: 600; color: var(--text); padding-top: 0.6rem; }
-        .toc-capitulo a { padding-left: 2rem; }
-        .toc-secao a { padding-left: 2.5rem; font-size: 0.8rem; }
-        .toc-subsecao a { padding-left: 3rem; font-size: 0.8rem; }
-        .toc-artigo a { padding-left: 2rem; font-size: 0.8rem; }
+  /* Document */
+  .document-container {
+    flex: 1;
+    padding: 2rem;
+    max-width: 900px;
+  }
 
-        .document-wrapper {
-            flex: 1;
-            padding: 2rem 3rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
+  .paper {
+    background: var(--paper);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 3rem 3.5rem;
+    min-height: 600px;
+  }
 
-        .paper {
-            background: var(--paper);
-            border-radius: 6px;
-            box-shadow: var(--shadow);
-            padding: 3rem 3.5rem;
-            min-height: 800px;
-        }
+  @media (max-width: 1024px) {
+    .toc-sidebar { display: none; }
+    .document-container { padding: 1rem; }
+    .paper { padding: 1.5rem; }
+  }
 
-        @media (max-width: 768px) {
-            .app-body { flex-direction: column; }
-            .sidebar { width: 100%; position: relative; top: 0; max-height: 300px; border-right: none; border-bottom: 1px solid var(--border); }
-            .document-wrapper { padding: 1rem; }
-            .paper { padding: 1.5rem; }
-        }
+  @media (max-width: 640px) {
+    .paper { padding: 1rem; }
+    .header { padding: 1rem; }
+    .header h1 { font-size: 1rem; }
+  }
 
-        .empty-state {
-            text-align: center;
-            padding: 5rem 2rem;
-            color: var(--text-secondary);
-        }
+  /* Legislative Elements */
+  .leg-titulo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--title-color);
+    text-align: center;
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+    scroll-margin-top: 80px;
+  }
 
-        .empty-state .icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.4;
-        }
+  .leg-capitulo {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--chapter-color);
+    text-align: center;
+    margin: 2rem 0 0.8rem;
+    scroll-margin-top: 80px;
+  }
 
-        .drop-hint {
-            margin-top: 1.5rem;
-            padding: 2rem;
-            border: 2px dashed var(--border);
-            border-radius: 8px;
-            background: var(--sidebar-bg);
-        }
+  .leg-secao {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--section-color);
+    text-align: center;
+    margin: 1.5rem 0 0.6rem;
+    font-style: italic;
+    scroll-margin-top: 80px;
+  }
 
-        .lei-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
+  .leg-subsecao {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    margin: 1.2rem 0 0.5rem;
+    scroll-margin-top: 80px;
+  }
 
-        .lei-header .lei-numero {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-        }
+  .leg-artigo {
+    margin: 1.2rem 0;
+    padding: 1rem 1.2rem;
+    background: var(--article-bg);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    scroll-margin-top: 80px;
+  }
 
-        .lei-header .lei-ementa {
-            font-style: italic;
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            margin: 1rem 2rem;
-            line-height: 1.6;
-        }
+  .leg-artigo-header {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
 
-        .lei-header .lei-meta {
-            font-family: var(--font-sans);
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 1rem;
-        }
+  .leg-paragrafo {
+    margin: 0.8rem 0 0.8rem 1.5rem;
+    padding: 0.6rem 0.8rem;
+    background: var(--paragraph-bg);
+    border-radius: 4px;
+    border-left: 2px solid var(--border);
+  }
 
-        .legal-doc h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin: 2.5rem 0 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.3rem;
-        }
+  .leg-paragrafo-header {
+    font-weight: 600;
+    color: var(--accent-light);
+  }
 
-        .legal-doc h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
-            margin: 2rem 0 0.75rem;
-            text-transform: uppercase;
-        }
+  .leg-inciso {
+    margin: 0.5rem 0 0.5rem 2rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--inciso-bg);
+    border-radius: 4px;
+  }
 
-        .legal-doc h4 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text);
-            margin: 1.5rem 0 0.5rem;
-            text-transform: uppercase;
-        }
+  .leg-inciso-header {
+    font-weight: 600;
+    color: var(--text);
+    display: inline;
+  }
 
-        .legal-doc h5 {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-            margin: 1.25rem 0 0.5rem;
-            text-transform: uppercase;
-            font-style: italic;
-        }
+  .leg-alinea {
+    margin: 0.3rem 0 0.3rem 3rem;
+    padding: 0.3rem 0.5rem;
+    background: var(--alinea-bg);
+    border-radius: 3px;
+  }
 
-        .artigo {
-            margin: 1.5rem 0;
-        }
+  .leg-alinea-header {
+    font-weight: 500;
+    color: var(--text-secondary);
+    display: inline;
+  }
 
-        .artigo-header {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
+  .leg-subalinea {
+    margin: 0.2rem 0 0.2rem 4rem;
+    padding: 0.2rem 0.4rem;
+  }
 
-        .artigo-body {
-            text-align: justify;
-            hyphens: auto;
-        }
+  .leg-texto {
+    text-align: justify;
+    hyphens: auto;
+  }
 
-        .paragrafo {
-            margin: 1rem 0 1rem 2rem;
-            text-align: justify;
-        }
+  .leg-ementa {
+    font-style: italic;
+    text-align: center;
+    margin: 1rem 2rem;
+    padding: 1rem;
+    border-left: 3px solid var(--accent);
+    background: var(--article-bg);
+  }
 
-        .paragrafo-header {
-            font-weight: 700;
-        }
+  .leg-preambulo {
+    text-align: justify;
+    margin: 1rem 0;
+    font-style: italic;
+  }
 
-        .paragrafo-unico {
-            margin: 1rem 0 1rem 2rem;
-            font-style: italic;
-            text-align: justify;
-        }
+  .leg-anexo {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--article-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    scroll-margin-top: 80px;
+  }
 
-        .paragrafo-unico::before {
-            content: "Parágrafo único. ";
-            font-weight: 700;
-            font-style: normal;
-        }
+  .leg-anexo-header {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--title-color);
+    text-align: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
 
-        .incisos-list {
-            list-style: none;
-            margin: 0.75rem 0 0.75rem 2rem;
-            padding: 0;
-        }
+  .leg-assinatura {
+    margin-top: 2rem;
+    text-align: center;
+    font-style: italic;
+  }
 
-        .incisos-list > li {
-            margin-bottom: 0.5rem;
-            text-align: justify;
-            position: relative;
-            padding-left: 2rem;
-        }
+  .leg-data {
+    text-align: center;
+    margin: 1rem 0;
+    font-weight: 600;
+  }
 
-        .incisos-list > li .inciso-marker {
-            position: absolute;
-            left: 0;
-            font-weight: 700;
-        }
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 4rem 2rem;
+  }
 
-        .alineas-list {
-            list-style: none;
-            margin: 0.5rem 0 0.5rem 0;
-            padding: 0;
-        }
+  .empty-state .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
 
-        .alineas-list > li {
-            margin-bottom: 0.35rem;
-            text-align: justify;
-            position: relative;
-            padding-left: 1.5rem;
-        }
+  /* Print */
+  @media print {
+    .header, .toc-sidebar, .drop-zone-container { display: none !important; }
+    .paper { box-shadow: none; padding: 0; background: white; }
+    body { background: white; }
+    .leg-artigo, .leg-paragrafo, .leg-inciso, .leg-alinea { 
+      background: transparent !important; 
+      border-left: 1px solid #ccc !important;
+    }
+  }
 
-        .alineas-list > li .alinea-marker {
-            position: absolute;
-            left: 0;
-        }
+  /* Search highlight */
+  .highlight {
+    background: #ffeb3b;
+    color: #000;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
 
-        .itens-list {
-            list-style: none;
-            margin: 0.4rem 0 0.4rem 0;
-            padding: 0;
-        }
+  [data-theme="dark"] .highlight {
+    background: #b8860b;
+    color: #fff;
+  }
 
-        .itens-list > li {
-            margin-bottom: 0.3rem;
-            padding-left: 1.5rem;
-            position: relative;
-            text-align: justify;
-        }
+  /* Font size classes */
+  .fs-small { font-size: 0.9rem; }
+  .fs-medium { font-size: 1.05rem; }
+  .fs-large { font-size: 1.2rem; }
 
-        .itens-list > li::before {
-            content: attr(data-marker) ". ";
-            position: absolute;
-            left: 0;
-            font-weight: 600;
-        }
+  /* Smooth scroll */
+  html { scroll-behavior: smooth; }
 
-        .anexo-ref {
-            background: var(--hover-bg);
-            padding: 0.15rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.9em;
-            border: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        .cross-ref {
-            color: var(--accent);
-            text-decoration: none;
-            border-bottom: 1px dotted var(--accent);
-            cursor: pointer;
-        }
-
-        .cross-ref:hover {
-            background: var(--hover-bg);
-        }
-
-        @media print {
-            .app-header, .sidebar, .toolbar { display: none !important; }
-            .document-wrapper { padding: 0; max-width: 100%; }
-            .paper { box-shadow: none; padding: 0; }
-            body { background: white; font-size: 12pt; }
-            .artigo { break-inside: avoid; }
-            h2, h3, h4, h5 { break-after: avoid; }
-        }
-
-        body.dark {
-            --bg: #1a1a1a;
-            --paper: #242424;
-            --text: #e4e4e4;
-            --text-secondary: #999;
-            --border: #333;
-            --sidebar-bg: #1f1f1f;
-            --hover-bg: #2a2a2a;
-            --accent: #c9a86c;
-            --accent-light: #d4b87a;
-        }
-
-        body.dark .paper {
-            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-        }
-    </style>
-<base target="_blank">
+  /* Loading */
+  .loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+  }
+  .loading::after {
+    content: "⏳";
+    display: block;
+    font-size: 2rem;
+    margin-top: 0.5rem;
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>
 </head>
 <body>
 
-    <header class="app-header">
-        <div>
-            <h1>⚖️ Visualizador de Legislação</h1>
-            <div class="subtitle">Conversor de textos legislativos (.txt / .mht)</div>
-        </div>
-        <div class="toolbar">
-            <label for="fileInput">📁 Abrir arquivo</label>
-            <input type="file" id="fileInput" accept=".txt,.text,.mht,.mhtml">
-            <button onclick="toggleSidebar()" id="btnSidebar">📑 Índice</button>
-            <button onclick="setFontSize('small')" class="font-btn">A-</button>
-            <button onclick="setFontSize('medium')" class="font-btn active" id="btnMedium">A</button>
-            <button onclick="setFontSize('large')" class="font-btn">A+</button>
-            <button onclick="toggleTheme()" id="btnTheme">🌙</button>
-            <button onclick="window.print()">🖨️</button>
-        </div>
-    </header>
+<div class="header">
+  <h1>📜 Conversor de Legislação Municipal</h1>
+  <div class="header-controls">
+    <button onclick="setFontSize('small')" title="Fonte pequena">🔤 A-</button>
+    <button onclick="setFontSize('medium')" title="Fonte média" id="btnMedium">🔤 A</button>
+    <button onclick="setFontSize('large')" title="Fonte grande">🔤 A+</button>
+    <button onclick="toggleTheme()" title="Alternar tema" id="themeBtn">🌙 Escuro</button>
+    <button onclick="window.print()" title="Imprimir">🖨️ Imprimir</button>
+    <button onclick="document.getElementById('fileInput').click()" title="Carregar arquivo">📁 Abrir</button>
+  </div>
+</div>
 
-    <div class="app-body">
-        <nav class="sidebar" id="sidebar">
-            <div class="toc-title">Estrutura do Documento</div>
-            <ul class="toc-list" id="tocList">
-                <li><a href="#" style="color: var(--text-secondary); font-style: italic;">Nenhum documento carregado</a></li>
-            </ul>
-        </nav>
-
-        <main class="document-wrapper">
-            <div class="paper" id="paper">
-                <div class="empty-state" id="emptyState">
-                    <div class="icon">📄</div>
-                    <h2>Nenhum documento carregado</h2>
-                    <p>Arraste um arquivo .txt ou .mht aqui, ou clique em "Abrir arquivo".</p>
-                    <div class="drop-hint">
-                        <strong>Suporta:</strong><br>
-                        • Arquivos de texto (.txt) com estrutura de Leis Municipais<br>
-                        • Arquivos MHTML (.mht / .mhtml) salvos pelo navegador<br><br>
-                        <small>Detecta automaticamente: Títulos, Capítulos, Seções, Subseções, Artigos, Parágrafos, Incisos, Alíneas e Subalíneas.</small>
-                    </div>
-                </div>
-                <div id="content" style="display: none;"></div>
-            </div>
-        </main>
+<div class="drop-zone-container" id="dropZoneContainer">
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept=".txt,.html,.htm,.mht,.mhtml">
+    <div class="drop-zone-icon">📂</div>
+    <div class="drop-zone-text">
+      <strong>Arraste um arquivo aqui</strong> ou clique para navegar<br>
+      <small>Suporta .txt, .html, .htm, .mht, .mhtml</small>
     </div>
+    <div class="file-name" id="fileName"></div>
+  </div>
+</div>
 
-    <script>
-        const REGEX = {
-            LEI_NUMERO: /^\s*(LEI\s+N[\u00ba\u00b0]?\s*[\d\.]+\s*,?\s*DE\s+\d+\s+DE\s+\w+\s+DE\s+\d{4})\s*\.?\s*$/i,
-            EMENTA: /^\s*[""""](.+)[""""]\s*\.?\s*$/,
-            AUTOR: /^\s*(Autor\s+do\s+Projeto\s+de\s+Lei.*)$/i,
-            PROMULGACAO: /^\s*(Omar\s+Najar.*faz\s+saber.*)$/i,
+<div class="layout">
+  <nav class="toc-sidebar" id="tocSidebar" style="display:none;">
+    <h3>📑 Índice</h3>
+    <div id="tocContent"></div>
+  </nav>
+  
+  <div class="document-container">
+    <div class="paper" id="paper">
+      <div class="empty-state" id="emptyState">
+        <div class="icon">📄</div>
+        <p><strong>Nenhum documento carregado.</strong><br>
+        Arraste um arquivo de legislação ou clique em "Abrir" para começar.</p>
+      </div>
+      <div id="content" style="display: none;"></div>
+    </div>
+  </div>
+</div>
 
-            TITULO: /^\s*T[\u00cdI]TULO\s+([IVX\d]+)\s*[-\u2013\u2014]?\s*(.*)\s*$/i,
-            CAPITULO: /^\s*CAP[\u00cdI]TULO\s+([IVX\d]+)\s*[-\u2013\u2014]?\s*(.*)\s*$/i,
-            SECAO: /^\s*SE[\u00c7C][\u00c3A]O\s+([IVX\d]+)\s*[-\u2013\u2014]?\s*(.*)\s*$/i,
-            SUBSECAO: /^\s*SUBSE[\u00c7C][\u00c3A]O\s+([IVX\d]+)\s*[-\u2013\u2014]?\s*(.*)\s*$/i,
+<script>
+// ===== PARSER ENGINE =====
 
-            ARTIGO: /^\s*Art\.?\s*(\d+[\d\.]*)\s*[\u00ba\u00b0]?\s*(.*)$/i,
-            PARAGRAFO: /^\s*\u00a7\s*(\d+[\d\.]*)\s*[\u00ba\u00b0]?\s*(.*)$/,
-            PARAGRAFO_UNICO: /^\s*Par[\u00e1a]grafo\s+[\u00fau]nico\.?\s*(.*)$/i,
+class LegislationParser {
+  constructor() {
+    this.elements = [];
+    this.toc = [];
+  }
 
-            INCISO: /^\s*([IVX]+)\s*[-\u2013\u2014\.]\s*(.*)$/,
-            ALINEA: /^\s*([a-z])\)\s*(.*)$/,
-            ITEM: /^\s*(\d+[\d\.]*)\s*[-\u2013\u2014\.]\s*(.*)$/,
+  parse(rawText) {
+    this.elements = [];
+    this.toc = [];
+    
+    // Step 1: Detect and handle HTML
+    let text = this.preprocess(rawText);
+    
+    // Step 2: Split into logical lines
+    let lines = this.splitLines(text);
+    
+    // Step 3: Parse structure
+    this.parseStructure(lines);
+    
+    return { elements: this.elements, toc: this.toc };
+  }
 
-            ANEXO: /(Anexo[s]?\s+[IVX\d]+[-]?[A-Z]?)/gi,
-            CROSS_REF: /(art\.?\s*\d+[\d\.]*)|(\u00a7\s*\d+[\d\.]*)|(inciso\s+[IVX]+)|(al[\u00edi]nea\s+"?[a-z]"?)|(lei\s+n[\u00ba\u00b0]?\s*[\d\.]+)/gi,
+  preprocess(rawText) {
+    // Detect if HTML
+    const isHTML = /<(html|body|table|font|p|div|br)[\s>]/i.test(rawText);
+    
+    if (isHTML) {
+      return this.extractTextFromHTML(rawText);
+    }
+    
+    // Plain text: decode HTML entities
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = rawText;
+    return textarea.value;
+  }
 
-            BLANK: /^\s*$/,
-            PAGE_BREAK: /^\s*[_\-]{3,}\s*$/,
-        };
+  extractTextFromHTML(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // Remove scripts and styles
+    doc.querySelectorAll('script, style').forEach(el => el.remove());
+    
+    // Get text content
+    let text = doc.body.innerText || doc.body.textContent || '';
+    
+    // Decode HTML entities
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
+  }
 
-        class LegalParser {
-            constructor(text) {
-                this.lines = text.split(/\r?\n/);
-                this.html = [];
-                this.toc = [];
-                this.state = {
-                    inArtigo: false,
-                    inIncisos: false,
-                    inAlineas: false,
-                    inItens: false
-                };
-                this.idCounter = 0;
-            }
-
-            genId(prefix) {
-                this.idCounter++;
-                return `${prefix}-${this.idCounter}`;
-            }
-
-            escapeHtml(text) {
-                return text
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;');
-            }
-
-            linkifyRefs(text) {
-                return text.replace(REGEX.CROSS_REF, (match) => {
-                    const clean = match.toLowerCase().replace(/[\u00ba\u00b0]/g, '').trim();
-                    return `<span class="cross-ref" data-ref="${clean}">${match}</span>`;
-                });
-            }
-
-            highlightAnexos(text) {
-                return text.replace(REGEX.ANEXO, '<span class="anexo-ref">$1</span>');
-            }
-
-            formatText(text) {
-                let html = this.escapeHtml(text);
-                html = this.highlightAnexos(html);
-                html = this.linkifyRefs(html);
-                return html;
-            }
-
-            closeOpenLists() {
-                if (this.state.inItens) {
-                    this.html.push('</ul>');
-                    this.state.inItens = false;
-                }
-                if (this.state.inAlineas) {
-                    this.html.push('</ul>');
-                    this.state.inAlineas = false;
-                }
-                if (this.state.inIncisos) {
-                    this.html.push('</ul>');
-                    this.state.inIncisos = false;
-                }
-            }
-
-            absorbItems(startIdx) {
-                let items = [];
-                let k = startIdx;
-                while (k < this.lines.length) {
-                    let itemLine = this.lines[k];
-                    let itemTrimmed = itemLine.trim();
-                    if (REGEX.BLANK.test(itemLine)) { k++; continue; }
-                    if (this.isStructural(itemTrimmed)) break;
-                    if (itemTrimmed.match(REGEX.INCISO)) break;
-                    if (itemTrimmed.match(REGEX.PARAGRAFO)) break;
-                    if (itemTrimmed.match(REGEX.PARAGRAFO_UNICO)) break;
-                    if (itemTrimmed.match(REGEX.ARTIGO)) break;
-                    if (itemTrimmed.match(REGEX.ALINEA)) break;
-
-                    let im = itemTrimmed.match(REGEX.ITEM);
-                    if (im) {
-                        items.push({ marker: im[1], text: im[2] });
-                        k++;
-                        continue;
-                    }
-
-                    if (items.length > 0) {
-                        items[items.length - 1].text += ' ' + itemTrimmed;
-                    }
-                    k++;
-                }
-                return { items, nextIdx: k };
-            }
-
-            renderAlinea(marker, text, items) {
-                let out = `<li><span class="alinea-marker">${marker})</span> ${this.formatText(text)}`;
-                if (items && items.length > 0) {
-                    out += '<ul class="itens-list">';
-                    items.forEach(it => {
-                        out += `<li data-marker="${it.marker}">${this.formatText(it.text)}</li>`;
-                    });
-                    out += '</ul>';
-                }
-                out += '</li>';
-                return out;
-            }
-
-            parse() {
-                let i = 0;
-                let headerParsed = false;
-
-                while (i < this.lines.length) {
-                    let line = this.lines[i];
-                    let trimmed = line.trim();
-
-                    if (REGEX.BLANK.test(line) || REGEX.PAGE_BREAK.test(line)) {
-                        i++;
-                        continue;
-                    }
-
-                    if (!headerParsed && i < 15) {
-                        let headerResult = this.parseHeader(i);
-                        if (headerResult.consumed > 0) {
-                            i += headerResult.consumed;
-                            headerParsed = true;
-                            continue;
-                        }
-                    }
-
-                    let matched = false;
-                    let m;
-
-                    if ((m = trimmed.match(REGEX.TITULO))) {
-                        this.closeOpenLists();
-                        this.state.inArtigo = false;
-                        const id = this.genId('titulo');
-                        const text = m[2] ? `TÍTULO ${m[1]} — ${m[2]}` : `TÍTULO ${m[1]}`;
-                        this.html.push(`<h2 id="${id}">${this.escapeHtml(text)}</h2>`);
-                        this.toc.push({ level: 'titulo', id, text });
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.CAPITULO))) {
-                        this.closeOpenLists();
-                        this.state.inArtigo = false;
-                        const id = this.genId('capitulo');
-                        const text = m[2] ? `CAPÍTULO ${m[1]} — ${m[2]}` : `CAPÍTULO ${m[1]}`;
-                        this.html.push(`<h3 id="${id}">${this.escapeHtml(text)}</h3>`);
-                        this.toc.push({ level: 'capitulo', id, text });
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.SECAO))) {
-                        this.closeOpenLists();
-                        this.state.inArtigo = false;
-                        const id = this.genId('secao');
-                        const text = m[2] ? `Seção ${m[1]} — ${m[2]}` : `Seção ${m[1]}`;
-                        this.html.push(`<h4 id="${id}">${this.escapeHtml(text)}</h4>`);
-                        this.toc.push({ level: 'secao', id, text });
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.SUBSECAO))) {
-                        this.closeOpenLists();
-                        this.state.inArtigo = false;
-                        const id = this.genId('subsecao');
-                        const text = m[2] ? `Subseção ${m[1]} — ${m[2]}` : `Subseção ${m[1]}`;
-                        this.html.push(`<h5 id="${id}">${this.escapeHtml(text)}</h5>`);
-                        this.toc.push({ level: 'subsecao', id, text });
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.ARTIGO))) {
-                        this.closeOpenLists();
-                        const id = this.genId('artigo');
-                        const artNum = m[1];
-                        let artText = m[2] || '';
-
-                        let j = i + 1;
-                        while (j < this.lines.length) {
-                            let nextLine = this.lines[j].trim();
-                            if (REGEX.BLANK.test(this.lines[j])) break;
-                            if (this.isStructural(nextLine)) break;
-                            if (nextLine.match(REGEX.PARAGRAFO)) break;
-                            if (nextLine.match(REGEX.PARAGRAFO_UNICO)) break;
-                            if (nextLine.match(REGEX.INCISO)) break;
-                            artText += ' ' + nextLine;
-                            j++;
-                        }
-
-                        this.html.push(`<section class="artigo" id="${id}">`);
-                        this.html.push(`<div class="artigo-header">Art. ${artNum}º</div>`);
-                        if (artText) {
-                            this.html.push(`<div class="artigo-body">${this.formatText(artText)}</div>`);
-                        }
-                        this.html.push('</section>');
-                        this.toc.push({ level: 'artigo', id, text: `Art. ${artNum}º` });
-                        this.state.inArtigo = true;
-                        i = j - 1;
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.PARAGRAFO_UNICO))) {
-                        this.closeOpenLists();
-                        const text = m[1] || '';
-                        this.html.push(`<p class="paragrafo-unico">${this.formatText(text)}</p>`);
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.PARAGRAFO))) {
-                        this.closeOpenLists();
-                        const num = m[1];
-                        let text = m[2] || '';
-
-                        let j = i + 1;
-                        while (j < this.lines.length) {
-                            let nextLine = this.lines[j].trim();
-                            if (REGEX.BLANK.test(this.lines[j])) break;
-                            if (this.isStructural(nextLine)) break;
-                            if (nextLine.match(REGEX.PARAGRAFO)) break;
-                            if (nextLine.match(REGEX.PARAGRAFO_UNICO)) break;
-                            if (nextLine.match(REGEX.INCISO)) break;
-                            text += ' ' + nextLine;
-                            j++;
-                        }
-
-                        this.html.push(`<p class="paragrafo"><span class="paragrafo-header">§ ${num}º</span> ${this.formatText(text)}</p>`);
-                        i = j - 1;
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.INCISO))) {
-                        if (!this.state.inIncisos) {
-                            this.closeOpenLists();
-                            this.html.push('<ul class="incisos-list">');
-                            this.state.inIncisos = true;
-                        }
-                        const marker = m[1];
-                        let text = m[2];
-
-                        let j = i + 1;
-                        let alineas = [];
-                        while (j < this.lines.length) {
-                            let nextLine = this.lines[j];
-                            let nextTrimmed = nextLine.trim();
-                            if (REGEX.BLANK.test(nextLine)) { j++; continue; }
-                            if (this.isStructural(nextTrimmed)) break;
-                            if (nextTrimmed.match(REGEX.INCISO)) break;
-                            if (nextTrimmed.match(REGEX.PARAGRAFO)) break;
-                            if (nextTrimmed.match(REGEX.PARAGRAFO_UNICO)) break;
-                            if (nextTrimmed.match(REGEX.ARTIGO)) break;
-
-                            let am = nextTrimmed.match(REGEX.ALINEA);
-                            if (am) {
-                                const itemResult = this.absorbItems(j + 1);
-                                alineas.push({
-                                    marker: am[1],
-                                    text: am[2],
-                                    items: itemResult.items
-                                });
-                                j = itemResult.nextIdx;
-                                continue;
-                            }
-
-                            if (alineas.length === 0) {
-                                text += ' ' + nextTrimmed;
-                            } else {
-                                alineas[alineas.length - 1].text += ' ' + nextTrimmed;
-                            }
-                            j++;
-                        }
-
-                        this.html.push(`<li><span class="inciso-marker">${marker} —</span> ${this.formatText(text)}`);
-                        if (alineas.length > 0) {
-                            this.html.push('<ul class="alineas-list">');
-                            alineas.forEach(a => {
-                                this.html.push(this.renderAlinea(a.marker, a.text, a.items));
-                            });
-                            this.html.push('</ul>');
-                        }
-                        this.html.push('</li>');
-                        i = j - 1;
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.ALINEA))) {
-                        if (!this.state.inAlineas) {
-                            this.closeOpenLists();
-                            this.html.push('<ul class="alineas-list">');
-                            this.state.inAlineas = true;
-                        }
-                        const marker = m[1];
-                        let text = m[2];
-                        const itemResult = this.absorbItems(i + 1);
-                        this.html.push(this.renderAlinea(marker, text, itemResult.items));
-                        i = itemResult.nextIdx - 1;
-                        matched = true;
-                    }
-                    else if ((m = trimmed.match(REGEX.ITEM))) {
-                        if (!this.state.inItens) {
-                            this.closeOpenLists();
-                            this.html.push('<ul class="itens-list">');
-                            this.state.inItens = true;
-                        }
-                        this.html.push(`<li data-marker="${m[1]}">${this.formatText(m[2])}</li>`);
-                        matched = true;
-                    }
-
-                    if (!matched) {
-                        if (this.state.inArtigo && !this.state.inIncisos && !this.state.inAlineas) {
-                            this.html.push(`<p style="margin-left: 0; text-align: justify;">${this.formatText(trimmed)}</p>`);
-                        } else if (trimmed.length > 0) {
-                            this.html.push(`<p style="text-align: justify;">${this.formatText(trimmed)}</p>`);
-                        }
-                    }
-
-                    i++;
-                }
-
-                this.closeOpenLists();
-                return {
-                    html: this.html.join('\n'),
-                    toc: this.toc
-                };
-            }
-
-            parseHeader(startIdx) {
-                let consumed = 0;
-                let leiNumero = '';
-                let ementa = '';
-                let autor = '';
-                let promulgacao = '';
-
-                for (let i = startIdx; i < Math.min(startIdx + 15, this.lines.length); i++) {
-                    let line = this.lines[i].trim();
-                    if (REGEX.BLANK.test(line)) {
-                        consumed++;
-                        continue;
-                    }
-
-                    let m;
-                    if ((m = line.match(REGEX.LEI_NUMERO))) {
-                        leiNumero = m[1];
-                        consumed++;
-                    } else if ((m = line.match(REGEX.EMENTA))) {
-                        ementa = m[1];
-                        consumed++;
-                    } else if ((m = line.match(REGEX.AUTOR))) {
-                        autor = m[1];
-                        consumed++;
-                    } else if ((m = line.match(REGEX.PROMULGACAO))) {
-                        promulgacao = m[1];
-                        consumed++;
-                    } else if (line.match(REGEX.TITULO)) {
-                        break;
-                    } else if (line.match(/^\s*Omar\s+Najar\s*,\s*Prefeito/)) {
-                        promulgacao = line;
-                        consumed++;
-                    } else {
-                        if (leiNumero && !ementa && line.length > 20) break;
-                        consumed++;
-                    }
-                }
-
-                if (leiNumero) {
-                    let html = '<div class="lei-header">';
-                    html += `<div class="lei-numero">${this.escapeHtml(leiNumero)}</div>`;
-                    if (autor) html += `<div class="lei-meta">${this.escapeHtml(autor)}</div>`;
-                    if (ementa) html += `<div class="lei-ementa">${this.escapeHtml(ementa)}</div>`;
-                    if (promulgacao) html += `<div class="lei-meta">${this.escapeHtml(promulgacao)}</div>`;
-                    html += '</div>';
-                    this.html.push(html);
-                }
-
-                return { consumed: leiNumero ? consumed : 0 };
-            }
-
-            isStructural(line) {
-                return REGEX.TITULO.test(line) ||
-                       REGEX.CAPITULO.test(line) ||
-                       REGEX.SECAO.test(line) ||
-                       REGEX.SUBSECAO.test(line) ||
-                       REGEX.ARTIGO.test(line);
-            }
+  splitLines(text) {
+    // Normalize line endings
+    text = text.replace(/\\r\\n/g, '\\n').replace(/\\r/g, '\\n');
+    
+    // Split and clean
+    let lines = text.split('\\n').map(l => l.trim()).filter(l => l.length > 0);
+    
+    // Merge broken lines (e.g., "CAPÍTULO\\nI\\nDos Princípios")
+    let merged = [];
+    let i = 0;
+    while (i < lines.length) {
+      let line = lines[i];
+      
+      // Check if next lines should be merged
+      if (i + 1 < lines.length) {
+        const next = lines[i + 1];
+        const next2 = lines[i + 2] || '';
+        
+        // CAPÍTULO + Roman numeral + Title
+        if (/^CAP[ÍI]TULO$/i.test(line) && /^[IVX]+$/i.test(next)) {
+          line = line + ' ' + next + ' ' + next2;
+          i += 3;
+          merged.push(line);
+          continue;
         }
-
-        // Detect if text is actually MHTML content disguised as .txt
-        function isMhtmlContent(text) {
-            const firstLines = text.slice(0, 500).toLowerCase();
-            return firstLines.includes('mime-version') &&
-                   firstLines.includes('content-type:') &&
-                   firstLines.includes('multipart/');
+        
+        // SEÇÃO + Roman numeral + Title
+        if (/^SE[ÇC][ÃA]O$/i.test(line) && /^[IVX]+$/i.test(next)) {
+          line = line + ' ' + next + ' ' + next2;
+          i += 3;
+          merged.push(line);
+          continue;
         }
-
-        // Extract plain text from HTML content
-        function htmlToText(html) {
-            // Create a temporary DOM element
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-
-            // Replace <br>, <br/>, <br /> with newlines
-            html = html.replace(/<br\s*\/?>/gi, '\n');
-
-            // Replace block elements with newlines
-            html = html.replace(/<\/p>/gi, '\n\n');
-            html = html.replace(/<\/div>/gi, '\n');
-            html = html.replace(/<\/td>/gi, '\t');
-            html = html.replace(/<\/tr>/gi, '\n');
-            html = html.replace(/<\/li>/gi, '\n');
-
-            // Decode common HTML entities
-            const entities = {
-                '&nbsp;': ' ', '&amp;': '&', '&lt;': '<', '&gt;': '>',
-                '&ccedil;': 'ç', '&Ccedil;': 'Ç', '&atilde;': 'ã', '&Atilde;': 'Ã',
-                '&otilde;': 'õ', '&Otilde;': 'Õ', '&aacute;': 'á', '&Aacute;': 'Á',
-                '&eacute;': 'é', '&Eacute;': 'É', '&iacute;': 'í', '&Iacute;': 'Í',
-                '&oacute;': 'ó', '&Oacute;': 'Ó', '&uacute;': 'ú', '&Uacute;': 'Ú',
-                '&agrave;': 'à', '&Agrave;': 'À', '&egrave;': 'è', '&Egrave;': 'È',
-                '&igrave;': 'ì', '&Igrave;': 'Ì', '&ograve;': 'ò', '&Ograve;': 'Ò',
-                '&ugrave;': 'ù', '&Ugrave;': 'Ù', '&acirc;': 'â', '&Acirc;': 'Â',
-                '&ecirc;': 'ê', '&Ecirc;': 'Ê', '&icirc;': 'î', '&Icirc;': 'Î',
-                '&ocirc;': 'ô', '&Ocirc;': 'Ô', '&ucirc;': 'û', '&Ucirc;': 'Û',
-                '&auml;': 'ä', '&Auml;': 'Ä', '&euml;': 'ë', '&Euml;': 'Ë',
-                '&iuml;': 'ï', '&Iuml;': 'Ï', '&ouml;': 'ö', '&Ouml;': 'Ö',
-                '&uuml;': 'ü', '&Uuml;': 'Ü', '&aring;': 'å', '&Aring;': 'Å',
-                '&aelig;': 'æ', '&AElig;': 'Æ', '&oslash;': 'ø', '&Oslash;': 'Ø',
-                '&ntilde;': 'ñ', '&Ntilde;': 'Ñ', '&ordf;': 'ª', '&ordm;': 'º',
-                '&quot;': '"', '&apos;': "'", '&rsquo;': "'", '&lsquo;': "'",
-                '&rdquo;': '"', '&ldquo;': '"', '&ndash;': '–', '&mdash;': '—',
-                '&hellip;': '…', '&bull;': '•', '&sect;': '§', '&deg;': '°',
-                '&sup1;': '¹', '&sup2;': '²', '&sup3;': '³', '&frac14;': '¼',
-                '&frac12;': '½', '&frac34;': '¾', '&para;': '¶', '&middot;': '·',
-                '&raquo;': '»', '&laquo;': '«', '&reg;': '®', '&copy;': '©',
-                '&trade;': '™', '&euro;': '€', '&pound;': '£', '&yen;': '¥',
-                '&cent;': '¢', '&plusmn;': '±', '&times;': '×', '&divide;': '÷',
-                '&micro;': 'µ', '&macr;': '¯', '&acute;': '´', '&cedil;': '¸',
-                '&circ;': 'ˆ', '&tilde;': '˜', '&ensp;': ' ', '&emsp;': '  ',
-                '&thinsp;': ' ', '&zwnj;': '', '&zwsp;': ''
-            };
-
-            for (const [entity, char] of Object.entries(entities)) {
-                html = html.split(entity).join(char);
+        
+        // SUBSEÇÃO + Roman numeral + Title
+        if (/^SUBSE[ÇC][ÃA]O$/i.test(line) && /^[IVX]+$/i.test(next)) {
+          line = line + ' ' + next + ' ' + next2;
+          i += 3;
+          merged.push(line);
+          continue;
+        }
+        
+        // TÍTULO + Roman numeral (title might be on same line or next)
+        if (/^T[ÍI]TULO$/i.test(line) && /^[IVX]+/i.test(next)) {
+          if (/^[IVX]+$/i.test(next)) {
+            line = line + ' ' + next;
+            i += 2;
+            // Check if title follows
+            if (i < lines.length && !/^T[ÍI]TULO$/i.test(lines[i]) && !/^CAP[ÍI]TULO$/i.test(lines[i]) && !/^Art\\./i.test(lines[i])) {
+              line += ' ' + lines[i];
+              i++;
             }
-
-            // Decode numeric entities
-            html = html.replace(/&#(x?[0-9a-fA-F]+);/g, (match, code) => {
-                const num = code.startsWith('x') ? parseInt(code.slice(1), 16) : parseInt(code, 10);
-                return String.fromCharCode(num);
-            });
-
-            // Strip remaining HTML tags
-            html = html.replace(/<[^>]+>/g, '');
-
-            // Collapse multiple newlines
-            html = html.replace(/\n{3,}/g, '\n\n');
-
-            // Collapse multiple spaces
-            html = html.replace(/[ \t]+/g, ' ');
-
-            return html.trim();
+            merged.push(line);
+            continue;
+          }
         }
-
-        function decodeQuotedPrintable(str) {
-            // Soft line breaks: = followed by newline
-            str = str.replace(/=(\r?\n)/g, '');
-            // Hex escapes
-            str = str.replace(/=([0-9A-Fa-f]{2})/g, (match, hex) => {
-                return String.fromCharCode(parseInt(hex, 16));
-            });
-            return str;
+        
+        // Art. Nº might be split
+        if (/^Art\\.$/i.test(line) && /^\\d+/i.test(next)) {
+          line = line + ' ' + next;
+          i += 2;
+          merged.push(line);
+          continue;
         }
-
-        function parseMht(mhtText) {
-            // Try to find boundary - handle various formats
-            const boundaryMatch = mhtText.match(/boundary=["']?([^"'\s;]+)["']?/i);
-            if (!boundaryMatch) {
-                // Try to extract HTML directly
-                const htmlMatch = mhtText.match(/<html[\s\S]*?<\/html>/i);
-                if (htmlMatch) {
-                    return htmlToText(htmlMatch[0]);
-                }
-                return null;
-            }
-
-            const boundary = boundaryMatch[1].replace(/^["']|["']$/g, '');
-            const parts = mhtText.split('--' + boundary);
-            let mainHtml = '';
-
-            for (const part of parts) {
-                if (!part.trim() || part.trim() === '--') continue;
-
-                // Find header/body separator - handle both \r\n\r\n and \n\n
-                let headerEnd = part.indexOf('\r\n\r\n');
-                if (headerEnd === -1) headerEnd = part.indexOf('\n\n');
-                if (headerEnd === -1) continue;
-
-                const headers = part.substring(0, headerEnd).toLowerCase();
-                let body = part.substring(headerEnd + (part.indexOf('\r\n\r\n') === headerEnd ? 4 : 2));
-
-                const ctMatch = headers.match(/content-type:\s*([^\s;]+)/);
-                const contentType = ctMatch ? ctMatch[1] : '';
-                const isBase64 = headers.includes('base64');
-                const isQP = headers.includes('quoted-printable');
-
-                if (contentType.includes('text/html')) {
-                    if (isQP) {
-                        body = decodeQuotedPrintable(body);
-                    } else if (isBase64) {
-                        try {
-                            body = atob(body.replace(/\s/g, ''));
-                        } catch(e) {
-                            body = body.replace(/\s/g, '');
-                        }
-                    }
-                    mainHtml = body;
-                    break; // We only need the first HTML part
-                }
-            }
-
-            if (!mainHtml) return null;
-            return htmlToText(mainHtml);
+        
+        // § Nº might be split
+        if (/^§$/i.test(line) && /^\\d+/i.test(next)) {
+          line = line + ' ' + next;
+          i += 2;
+          merged.push(line);
+          continue;
         }
+      }
+      
+      merged.push(line);
+      i++;
+    }
+    
+    return merged;
+  }
 
-        const paper = document.getElementById('paper');
-        const content = document.getElementById('content');
-        const emptyState = document.getElementById('emptyState');
-        const tocList = document.getElementById('tocList');
-        const sidebar = document.getElementById('sidebar');
-        const fileInput = document.getElementById('fileInput');
-
-        document.addEventListener('dragover', e => e.preventDefault());
-        document.addEventListener('drop', e => {
-            e.preventDefault();
-            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  parseStructure(lines) {
+    let i = 0;
+    let currentTitle = null;
+    let currentChapter = null;
+    let currentSection = null;
+    let currentSubsection = null;
+    let currentArticle = null;
+    let currentParagraph = null;
+    let currentInciso = null;
+    
+    // First pass: identify document metadata
+    let title = '';
+    let ementa = [];
+    let preambulo = [];
+    let inEmenta = false;
+    let inPreambulo = false;
+    let metadataEnd = 0;
+    
+    // Find title
+    for (let j = 0; j < Math.min(20, lines.length); j++) {
+      if (/^LEI\\s+N[º°]\\s*\\d+/i.test(lines[j])) {
+        title = lines[j];
+        metadataEnd = j + 1;
+        break;
+      }
+    }
+    
+    // Find ementa (quoted text near beginning)
+    for (let j = metadataEnd; j < Math.min(30, lines.length); j++) {
+      if (lines[j].startsWith('"') || lines[j].startsWith('\\u201C') || lines[j].startsWith('\\u2018')) {
+        inEmenta = true;
+      }
+      if (inEmenta) {
+        ementa.push(lines[j]);
+        if (lines[j].endsWith('"') || lines[j].endsWith('\\u201D') || lines[j].endsWith('\\u2019')) {
+          inEmenta = false;
+          metadataEnd = j + 1;
+          break;
+        }
+      }
+    }
+    
+    // Find preâmbulo (text before first TÍTULO or Art.)
+    for (let j = metadataEnd; j < lines.length; j++) {
+      if (/^T[ÍI]TULO\\s+[IVX]/i.test(lines[j]) || /^Art\\.\\s*\\d+/i.test(lines[j])) {
+        break;
+      }
+      if (lines[j].length > 20 && !/^CAP[ÍI]TULO/i.test(lines[j])) {
+        preambulo.push(lines[j]);
+      }
+    }
+    
+    // Add metadata
+    if (title) {
+      this.addElement('titulo-documento', title, { level: 0 });
+    }
+    if (ementa.length > 0) {
+      this.addElement('ementa', ementa.join(' '));
+    }
+    if (preambulo.length > 0) {
+      this.addElement('preambulo', preambulo.join(' '));
+    }
+    
+    // Second pass: parse legislative structure
+    for (i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      
+      // Skip already processed metadata
+      if (i < metadataEnd && (line === title || ementa.some(e => line.includes(e)))) continue;
+      
+      // TÍTULO
+      const tituloMatch = line.match(/^T[ÍI]TULO\\s+([IVX\\d]+)\\s*(.*)/i);
+      if (tituloMatch) {
+        currentTitle = tituloMatch[1];
+        const tituloText = tituloMatch[2] ? tituloMatch[2].trim() : '';
+        this.addElement('titulo', line, { 
+          numero: currentTitle, 
+          texto: tituloText,
+          id: `titulo-${currentTitle}`
         });
-        fileInput.addEventListener('change', e => {
-            if (e.target.files.length) handleFile(e.target.files[0]);
+        currentChapter = null;
+        currentSection = null;
+        currentSubsection = null;
+        continue;
+      }
+      
+      // CAPÍTULO
+      const capMatch = line.match(/^CAP[ÍI]TULO\\s+([IVX\\d]+)\\s*(.*)/i);
+      if (capMatch) {
+        currentChapter = capMatch[1];
+        const capText = capMatch[2] ? capMatch[2].trim() : '';
+        this.addElement('capitulo', line, { 
+          numero: currentChapter, 
+          texto: capText,
+          id: `cap-${currentTitle || '0'}-${currentChapter}`
         });
-
-        function handleFile(file) {
-            const ext = file.name.split('.').pop().toLowerCase();
-            const reader = new FileReader();
-
-            reader.onload = e => {
-                const text = e.target.result;
-
-                // Check if .txt file is actually MHTML content
-                if ((ext === 'txt' || ext === 'text') && isMhtmlContent(text)) {
-                    const extractedText = parseMht(text);
-                    if (extractedText) {
-                        renderTxt(extractedText);
-                    } else {
-                        alert('Não foi possível extrair o texto do arquivo MHTML.');
-                    }
-                    return;
-                }
-
-                if (ext === 'txt' || ext === 'text') {
-                    renderTxt(text);
-                } else if (ext === 'mht' || ext === 'mhtml') {
-                    const extractedText = parseMht(text);
-                    if (extractedText) {
-                        renderTxt(extractedText);
-                    } else {
-                        renderMhtRaw(text);
-                    }
-                }
-            };
-            reader.readAsText(file);
+        currentSection = null;
+        currentSubsection = null;
+        continue;
+      }
+      
+      // SEÇÃO
+      const secMatch = line.match(/^SE[ÇC][ÃA]O\\s+([IVX\\d]+)\\s*(.*)/i);
+      if (secMatch) {
+        currentSection = secMatch[1];
+        const secText = secMatch[2] ? secMatch[2].trim() : '';
+        this.addElement('secao', line, { 
+          numero: currentSection, 
+          texto: secText,
+          id: `sec-${currentTitle || '0'}-${currentChapter || '0'}-${currentSection}`
+        });
+        currentSubsection = null;
+        continue;
+      }
+      
+      // SUBSEÇÃO
+      const subsecMatch = line.match(/^SUBSE[ÇC][ÃA]O\\s+([IVX\\d]+)\\s*(.*)/i);
+      if (subsecMatch) {
+        currentSubsection = subsecMatch[1];
+        const subsecText = subsecMatch[2] ? subsecMatch[2].trim() : '';
+        this.addElement('subsecao', line, { 
+          numero: currentSubsection, 
+          texto: subsecText,
+          id: `subsec-${currentTitle || '0'}-${currentChapter || '0'}-${currentSection || '0'}-${currentSubsection}`
+        });
+        continue;
+      }
+      
+      // ARTIGO
+      const artMatch = line.match(/^Art\\.\\s*(\\d+[º°]?)\\s*(.*)/i);
+      if (artMatch) {
+        const artNum = artMatch[1];
+        const artText = artMatch[2] ? artMatch[2].trim() : '';
+        currentArticle = artNum;
+        this.addElement('artigo', line, { 
+          numero: artNum, 
+          texto: artText,
+          id: `art-${artNum.replace(/[º°]/g, '')}`
+        });
+        currentParagraph = null;
+        currentInciso = null;
+        continue;
+      }
+      
+      // PARÁGRAFO ÚNICO
+      const paragUnicoMatch = line.match(/^(Parágrafo\\s+único)\\.\\s*(.*)/i);
+      if (paragUnicoMatch) {
+        const paragText = paragUnicoMatch[2] ? paragUnicoMatch[2].trim() : '';
+        currentParagraph = 'unico';
+        this.addElement('paragrafo', line, { 
+          numero: 'único', 
+          texto: paragText,
+          id: `parag-${currentArticle || '0'}-unico`
+        });
+        currentInciso = null;
+        continue;
+      }
+      
+      // PARÁGRAFO (§)
+      const paragMatch = line.match(/^§\\s*(\\d+[º°]?)\\s*(.*)/);
+      if (paragMatch) {
+        const paragNum = paragMatch[1];
+        const paragText = paragMatch[2] ? paragMatch[2].trim() : '';
+        currentParagraph = paragNum;
+        this.addElement('paragrafo', line, { 
+          numero: paragNum, 
+          texto: paragText,
+          id: `parag-${currentArticle || '0'}-${paragNum.replace(/[º°]/g, '')}`
+        });
+        currentInciso = null;
+        continue;
+      }
+      
+      // INCISO (Roman numerals with dash)
+      const incisoMatch = line.match(/^([IVX]+)\\s*[-–—]\\s*(.*)/);
+      if (incisoMatch && incisoMatch[2].length > 5) {
+        const incisoNum = incisoMatch[1];
+        const incisoText = incisoMatch[2].trim();
+        currentInciso = incisoNum;
+        this.addElement('inciso', line, { 
+          numero: incisoNum, 
+          texto: incisoText,
+          id: `inciso-${currentArticle || '0'}-${incisoNum}`
+        });
+        continue;
+      }
+      
+      // ALÍNEA (lowercase letter with parenthesis)
+      const alineaMatch = line.match(/^([a-z])\\)\\s*(.*)/);
+      if (alineaMatch && alineaMatch[2].length > 3) {
+        const alineaNum = alineaMatch[1];
+        const alineaText = alineaMatch[2].trim();
+        this.addElement('alinea', line, { 
+          numero: alineaNum, 
+          texto: alineaText,
+          id: `alinea-${currentArticle || '0'}-${currentInciso || '0'}-${alineaNum}`
+        });
+        continue;
+      }
+      
+      // SUBALÍNEA (lowercase letters with parenthesis, 2+ chars - but this is rare in Brazilian law)
+      const subalineaMatch = line.match(/^([a-z]{2,})\\)\\s*(.*)/);
+      if (subalineaMatch && subalineaMatch[2].length > 3) {
+        const subalineaNum = subalineaMatch[1];
+        const subalineaText = subalineaMatch[2].trim();
+        this.addElement('subalinea', line, { 
+          numero: subalineaNum, 
+          texto: subalineaText 
+        });
+        continue;
+      }
+      
+      // ANEXO
+      const anexoMatch = line.match(/^(ANEXO\\s+[IVX\\d-]+[AB]?)\\s*(.*)/i);
+      if (anexoMatch) {
+        const anexoNum = anexoMatch[1];
+        const anexoText = anexoMatch[2] ? anexoMatch[2].trim() : '';
+        this.addElement('anexo', line, { 
+          numero: anexoNum, 
+          texto: anexoText,
+          id: `anexo-${anexoNum.replace(/\\s+/g, '-').toLowerCase()}`
+        });
+        continue;
+      }
+      
+      // ASSINATURA / DATA
+      if (/^(Prefeitura|Publicado|Ref\\.)/i.test(line) || /^[A-Z][a-z]+\\s+[A-Z][a-z]+$/i.test(line) && line.length < 40) {
+        if (i > lines.length - 20) {
+          this.addElement('assinatura', line);
+          continue;
         }
-
-        function renderTxt(text) {
-            emptyState.style.display = 'none';
-            content.style.display = 'block';
-            sidebar.classList.remove('hidden');
-
-            const parser = new LegalParser(text);
-            const result = parser.parse();
-
-            content.innerHTML = `<div class="legal-doc">${result.html}</div>`;
-            buildToc(result.toc);
-            setupScrollSpy();
+      }
+      
+      // Regular text (continuation of previous element)
+      if (this.elements.length > 0) {
+        const last = this.elements[this.elements.length - 1];
+        if (last.type === 'texto') {
+          last.content += ' ' + line;
+        } else {
+          this.addElement('texto', line);
         }
+      } else {
+        this.addElement('texto', line);
+      }
+    }
+  }
 
-        function renderMhtRaw(mhtText) {
-            // Fallback: render MHTML HTML directly without restructuring
-            emptyState.style.display = 'none';
-            content.style.display = 'block';
-            sidebar.classList.add('hidden');
-            tocList.innerHTML = '<li><a href="#" style="font-style: italic;">MHTML — índice não disponível</a></li>';
+  addElement(type, content, meta = {}) {
+    const el = { type, content, ...meta };
+    this.elements.push(el);
+    
+    // Add to TOC for major elements
+    if (['titulo', 'capitulo', 'secao', 'subsecao', 'artigo', 'anexo'].includes(type)) {
+      this.toc.push({
+        type,
+        label: this.getTOCLabel(el),
+        id: meta.id || '',
+        level: this.getTOCLevel(type)
+      });
+    }
+  }
 
-            const boundaryMatch = mhtText.match(/boundary=["']?([^"'\s;]+)["']?/i);
-            if (!boundaryMatch) {
-                const htmlMatch = mhtText.match(/<html[\s\S]*?<\/html>/i);
-                content.innerHTML = htmlMatch ? htmlMatch[0] : '<p>Erro ao analisar MHTML.</p>';
-                return;
-            }
+  getTOCLabel(el) {
+    switch(el.type) {
+      case 'titulo': return `📖 ${el.content}`;
+      case 'capitulo': return `📂 ${el.content}`;
+      case 'secao': return `📁 ${el.content}`;
+      case 'subsecao': return `📄 ${el.content}`;
+      case 'artigo': return `§ Art. ${el.numero}`;
+      case 'anexo': return `📎 ${el.content}`;
+      default: return el.content;
+    }
+  }
 
-            const boundary = boundaryMatch[1].replace(/^["']|["']$/g, '');
-            const parts = mhtText.split('--' + boundary);
-            const resources = {};
-            let mainHtml = '';
+  getTOCLevel(type) {
+    const levels = { titulo: 0, capitulo: 1, secao: 2, subsecao: 3, artigo: 4, anexo: 1 };
+    return levels[type] || 5;
+  }
+}
 
-            for (const part of parts) {
-                if (!part.trim() || part.trim() === '--') continue;
+// ===== RENDERER =====
 
-                let headerEnd = part.indexOf('\r\n\r\n');
-                if (headerEnd === -1) headerEnd = part.indexOf('\n\n');
-                if (headerEnd === -1) continue;
+function renderDocument(data) {
+  const content = document.getElementById('content');
+  const tocContent = document.getElementById('tocContent');
+  const tocSidebar = document.getElementById('tocSidebar');
+  
+  let html = '';
+  let tocHtml = '';
+  
+  data.elements.forEach(el => {
+    switch(el.type) {
+      case 'titulo-documento':
+        html += `<h1 class="leg-titulo" style="margin-top:0;">${escapeHtml(el.content)}</h1>`;
+        break;
+      case 'titulo':
+        html += `<h2 class="leg-titulo" id="${el.id}">${escapeHtml(el.content)}</h2>`;
+        break;
+      case 'capitulo':
+        html += `<h3 class="leg-capitulo" id="${el.id}">${escapeHtml(el.content)}</h3>`;
+        break;
+      case 'secao':
+        html += `<h4 class="leg-secao" id="${el.id}">${escapeHtml(el.content)}</h4>`;
+        break;
+      case 'subsecao':
+        html += `<h5 class="leg-subsecao" id="${el.id}">${escapeHtml(el.content)}</h5>`;
+        break;
+      case 'ementa':
+        html += `<div class="leg-ementa">${escapeHtml(el.content)}</div>`;
+        break;
+      case 'preambulo':
+        html += `<div class="leg-preambulo">${escapeHtml(el.content)}</div>`;
+        break;
+      case 'artigo':
+        html += `<div class="leg-artigo" id="${el.id}">
+          <div class="leg-artigo-header">Art. ${escapeHtml(el.numero)}</div>
+          <div class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^Art\.\\s*\\d+[º°]?\\s*/, ''))}</div>
+        </div>`;
+        break;
+      case 'paragrafo':
+        html += `<div class="leg-paragrafo" id="${el.id}">
+          <span class="leg-paragrafo-header">§ ${escapeHtml(el.numero)}</span>
+          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^§\\s*\\d+[º°]?\\s*/, '').replace(/^Parágrafo\\s+único\\.\\s*/, ''))}</span>
+        </div>`;
+        break;
+      case 'inciso':
+        html += `<div class="leg-inciso" id="${el.id}">
+          <span class="leg-inciso-header">${escapeHtml(el.numero)} –</span>
+          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^[IVX]+\\s*[-–—]\\s*/, ''))}</span>
+        </div>`;
+        break;
+      case 'alinea':
+        html += `<div class="leg-alinea">
+          <span class="leg-alinea-header">${escapeHtml(el.numero)})</span>
+          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^[a-z]\\)\\s*/, ''))}</span>
+        </div>`;
+        break;
+      case 'subalinea':
+        html += `<div class="leg-subalinea">
+          <span class="leg-alinea-header">${escapeHtml(el.numero)})</span>
+          <span class="leg-texto">${escapeHtml(el.texto || el.content.replace(/^[a-z]{2,}\\)\\s*/, ''))}</span>
+        </div>`;
+        break;
+      case 'anexo':
+        html += `<div class="leg-anexo" id="${el.id}">
+          <div class="leg-anexo-header">${escapeHtml(el.content)}</div>
+        </div>`;
+        break;
+      case 'assinatura':
+        html += `<div class="leg-assinatura">${escapeHtml(el.content)}</div>`;
+        break;
+      case 'texto':
+        html += `<p class="leg-texto">${escapeHtml(el.content)}</p>`;
+        break;
+    }
+  });
+  
+  // Build TOC
+  data.toc.forEach(item => {
+    const className = item.type;
+    tocHtml += `<div class="toc-item ${className}" onclick="scrollToElement('${item.id}')" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</div>`;
+  });
+  
+  content.innerHTML = html;
+  tocContent.innerHTML = tocHtml;
+  
+  if (data.toc.length > 0) {
+    tocSidebar.style.display = 'block';
+  }
+}
 
-                const headers = part.substring(0, headerEnd).toLowerCase();
-                let body = part.substring(headerEnd + (part.indexOf('\r\n\r\n') === headerEnd ? 4 : 2));
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
 
-                const ctMatch = headers.match(/content-type:\s*([^\s;]+)/);
-                const clMatch = headers.match(/content-location:\s*([^\r\n]+)/);
-                const cidMatch = headers.match(/content-id:\s*<([^>]+)>/);
+function scrollToElement(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
 
-                const contentType = ctMatch ? ctMatch[1] : '';
-                const location = clMatch ? clMatch[1].trim() : '';
-                const cid = cidMatch ? cidMatch[1] : '';
-                const isBase64 = headers.includes('base64');
-                const isQP = headers.includes('quoted-printable');
+// ===== UI CONTROLS =====
 
-                if (isQP) body = decodeQuotedPrintable(body);
-                else if (isBase64) {
-                    try { body = atob(body.replace(/\s/g, '')); }
-                    catch(e) { body = body.replace(/\s/g, ''); }
-                }
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileName = document.getElementById('fileName');
+const content = document.getElementById('content');
+const emptyState = document.getElementById('emptyState');
+const dropZoneContainer = document.getElementById('dropZoneContainer');
 
-                if (contentType.includes('text/html')) {
-                    mainHtml = body;
-                } else if (contentType.startsWith('image/') || contentType.startsWith('application/')) {
-                    const b64 = isBase64 ? body : btoa(body);
-                    const dataUri = `data:${contentType};base64,${b64}`;
-                    if (location) resources[location] = dataUri;
-                    if (cid) resources['cid:' + cid] = dataUri;
-                }
-            }
+// Drag & drop
+dropZone.addEventListener('click', () => fileInput.click());
 
-            Object.keys(resources).forEach(key => {
-                const esc = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const re = new RegExp(`(src|href)=["\']${esc}["\']`, 'gi');
-                mainHtml = mainHtml.replace(re, `$1="${resources[key]}"`);
-                const fname = key.split('/').pop();
-                if (fname) {
-                    const fre = new RegExp(`(src|href)=["\'][^"\']*${fname.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["\']`, 'gi');
-                    mainHtml = mainHtml.replace(fre, `$1="${resources[key]}"`);
-                }
-            });
+dropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
 
-            const container = document.createElement('div');
-            container.innerHTML = mainHtml || '<p>Erro ao analisar MHTML.</p>';
-            container.querySelectorAll('script').forEach(el => el.remove());
-            content.innerHTML = '';
-            content.appendChild(container);
-        }
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('dragover');
+});
 
-        function buildToc(items) {
-            tocList.innerHTML = '';
-            if (items.length === 0) {
-                tocList.innerHTML = '<li><a href="#" style="font-style: italic;">Nenhuma estrutura detectada</a></li>';
-                return;
-            }
-            items.forEach(item => {
-                const li = document.createElement('li');
-                li.className = `toc-${item.level}`;
-                const a = document.createElement('a');
-                a.href = `#${item.id}`;
-                a.textContent = item.text;
-                a.onclick = e => {
-                    e.preventDefault();
-                    document.getElementById(item.id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-                };
-                li.appendChild(a);
-                tocList.appendChild(li);
-            });
-        }
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
 
-        function setupScrollSpy() {
-            const headings = content.querySelectorAll('[id]');
-            const tocItems = tocList.querySelectorAll('li');
-            if (!headings.length) return;
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
 
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        tocItems.forEach(li => li.classList.remove('active'));
-                        const active = tocList.querySelector(`a[href="#${entry.target.id}"]`);
-                        if (active) active.parentElement.classList.add('active');
-                    }
-                });
-            }, { rootMargin: '-10% 0px -80% 0px' });
+function handleFile(file) {
+  fileName.textContent = '📄 ' + file.name;
+  const reader = new FileReader();
+  
+  reader.onload = (e) => {
+    try {
+      const parser = new LegislationParser();
+      const data = parser.parse(e.target.result);
+      
+      emptyState.style.display = 'none';
+      content.style.display = 'block';
+      dropZoneContainer.style.display = 'none';
+      
+      renderDocument(data);
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao processar arquivo: ' + err.message);
+    }
+  };
+  
+  reader.readAsText(file);
+}
 
-            headings.forEach(h => observer.observe(h));
-        }
+// Font size
+function setFontSize(size) {
+  document.querySelectorAll('.header-controls button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const paper = document.getElementById('paper');
+  paper.classList.remove('fs-small', 'fs-medium', 'fs-large');
+  paper.classList.add('fs-' + size);
+}
 
-        let sidebarVisible = true;
-        function toggleSidebar() {
-            sidebarVisible = !sidebarVisible;
-            sidebar.classList.toggle('hidden', !sidebarVisible);
-        }
+// Theme
+let darkMode = false;
+function toggleTheme() {
+  darkMode = !darkMode;
+  document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = darkMode ? '☀️ Claro' : '🌙 Escuro';
+}
 
-        function setFontSize(size) {
-            document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btnMedium').classList.remove('active');
-            event.target.classList.add('active');
-            const sizes = { small: '15px', medium: '17px', large: '19px' };
-            document.body.style.fontSize = sizes[size];
-        }
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === 'o') {
+      e.preventDefault();
+      fileInput.click();
+    } else if (e.key === 'p') {
+      e.preventDefault();
+      window.print();
+    }
+  }
+});
+</script>
 
-        let darkMode = false;
-        function toggleTheme() {
-            darkMode = !darkMode;
-            document.body.classList.toggle('dark', darkMode);
-            document.getElementById('btnTheme').textContent = darkMode ? '☀️' : '🌙';
-        }
-    </script>
 </body>
 </html>
